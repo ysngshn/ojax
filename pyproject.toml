@@ -1,0 +1,26 @@
+[project]
+name = "ojax"
+authors = [
+  {name="Yuesong Shen"},
+]
+description = "An extension for modular JAX code."
+readme = "readme.rst"
+license = {text="Apache-2.0"}
+requires-python = ">=3.9"
+dependencies = [
+  "jax",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/ysngshn/ojax"
+
+[build-system]
+requires = ["setuptools >= 61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["ojax"]
+
+[tool.setuptools.dynamic]
+version = {attr = "ojax.__version__"}
