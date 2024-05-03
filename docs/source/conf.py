@@ -36,6 +36,10 @@ html_static_path = ['_static']
 
 # -- Custom configs
 
+# sphinx-rtd-theme config
+github_url = "https://ysngshn.github.io/ojax"
+
+
 # autodoc config
 autodoc_member_order = 'bysource'
 

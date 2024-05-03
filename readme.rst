@@ -1,11 +1,5 @@
-.. |.example+example code using OJAX| replace:: example code using OJAX
-.. _.example+example code using OJAX: https://ysngshn.github.io/ojax/example.html
-.. |.install+following the installation guide| replace:: following the installation guide
-.. _.install+following the installation guide: https://ysngshn.github.io/ojax/install.html
-.. |.modules+OJAX API reference| replace:: OJAX API reference
-.. _.modules+OJAX API reference: https://ysngshn.github.io/ojax/modules.html
-.. |.quickstart+quickstart section| replace:: quickstart section
-.. _.quickstart+quickstart section: https://ysngshn.github.io/ojax/quickstart.html
+
+
 
 
 OJAX
@@ -94,12 +88,12 @@ awesome functional programming language.
 How to code with OJAX
 ---------------------
 
-OJAX is easy to install |.install+following the installation guide|_.
+OJAX is easy to install `following the installation guide`_.
 
-You can have a look at the |.quickstart+quickstart section|_ to get
-started, and there is also a simple |.example+example code using OJAX|_.
+You can have a look at the `quickstart section`_ to get
+started, and there is also a simple `example code using OJAX`_.
 
-Of course, check out the |.modules+OJAX API reference|_ for exact
+Of course, check out the `OJAX API reference`_ for exact
 definitions.
 
 ..
@@ -109,9 +103,13 @@ definitions.
 .. _Haiku: https://github.com/deepmind/dm-haiku
 .. _InitVar: https://docs.python.org/3/library/dataclasses.html#init-only-variables
 .. _JAX: https://jax.readthedocs.io
+.. _OJAX API reference: https://ysngshn.github.io/ojax/modules.html
 .. _PAX: https://github.com/NTT123/pax
 .. _Stax NN library: https://github.com/google/jax/blob/main/jax/example_libraries/stax.py
 .. _Simple Pytree: https://github.com/cgarciae/simple-pytree
 .. _Treeo: https://github.com/cgarciae/treeo
 .. _Treex: https://github.com/cgarciae/treex
+.. _example code using OJAX: https://ysngshn.github.io/ojax/example.html
+.. _following the installation guide: https://ysngshn.github.io/ojax/install.html
+.. _quickstart section: https://ysngshn.github.io/ojax/quickstart.html
 

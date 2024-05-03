@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example: NN layer with OJAX &mdash; OJAX  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://ysngshn.github.io/ojax/example.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="modules.html" />
+    <link rel="prev" title="OJAX Quickstart" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            OJAX
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">OJAX Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example: NN layer with OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OJAX</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example: NN layer with OJAX</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ysngshn/ojax/blob/main/docs/source/example.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example-nn-layer-with-ojax">
+<h1>Example: NN layer with OJAX<a class="headerlink" href="#example-nn-layer-with-ojax" title="Link to this heading"></a></h1>
+<p>Here is a self-contained example showing how OJAX can be used to define a fully
+connected layer for deep learning. The highlighted regions below showcase two
+important characteristics of OJAX:</p>
+<ul class="simple">
+<li><p>OJAX has seamless JAX integration: use JAX transforms and functions anywhere.
+And they work as intended.</p></li>
+<li><p>OJAX is “pure like JAX”: no in-place update. New instances with updated
+states are always returned instead.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">jax.random</span> <span class="kn">import</span> <span class="n">PRNGKey</span><span class="p">,</span> <span class="n">split</span> <span class="k">as</span> <span class="n">jrsplit</span><span class="p">,</span> <span class="n">normal</span> <span class="k">as</span> <span class="n">jrnormal</span>
+<span class="kn">from</span> <span class="nn">ojax</span> <span class="kn">import</span> <span class="n">aux</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">OTree</span><span class="p">,</span> <span class="n">get_field_type</span>
+
+
+<span class="c1"># defines a fully connected layer for neural networks</span>
+<span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">OTree</span><span class="p">):</span>
+    <span class="n">input_features</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># inferred to be auxiliary data</span>
+    <span class="n">output_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">aux</span><span class="p">()</span>  <span class="c1"># or explicit declaration</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># inferred as child</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">child</span><span class="p">(</span><span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># explicit declaration</span>
+
+    <span class="c1"># # optional here, automatically generated by the dataclass</span>
+    <span class="c1"># def __init__(self, input_features: int, output_features: int):</span>
+    <span class="c1">#     self.assign_(</span>
+    <span class="c1">#         input_features=input_features, output_features=output_features</span>
+    <span class="c1">#     )</span>
+
+    <span class="c1"># forward pass</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_array</span><span class="p">):</span>
+<span class="hll">        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">input_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+</span>
+    <span class="c1"># set new parameters, notice it returns an updated version of itself</span>
+    <span class="k">def</span> <span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">weight</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_features</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">bias</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_features</span><span class="p">,)</span>
+<span class="hll">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+</span>
+
+<span class="c1"># example usage</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># define data</span>
+    <span class="n">data_count</span><span class="p">,</span> <span class="n">data_features</span><span class="p">,</span> <span class="n">output_features</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">key_data</span><span class="p">,</span> <span class="n">key_weight</span><span class="p">,</span> <span class="n">key_bias</span> <span class="o">=</span> <span class="n">jrsplit</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">input_data</span> <span class="o">=</span> <span class="n">jrnormal</span><span class="p">(</span><span class="n">key_data</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">data_count</span><span class="p">,</span> <span class="n">data_features</span><span class="p">))</span>
+    <span class="c1"># define layer</span>
+    <span class="n">init_weight</span> <span class="o">=</span> <span class="n">jrnormal</span><span class="p">(</span><span class="n">key_weight</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">output_features</span><span class="p">,</span> <span class="n">data_features</span><span class="p">))</span>
+    <span class="n">init_bias</span> <span class="o">=</span> <span class="n">jrnormal</span><span class="p">(</span><span class="n">key_bias</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">output_features</span><span class="p">,))</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">data_features</span><span class="p">,</span> <span class="n">output_features</span><span class="p">)</span>
+<span class="hll">    <span class="c1"># No inplace update, need to get the returned updated layer instance!</span>
+</span><span class="hll">    <span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">init_weight</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">init_bias</span><span class="p">)</span>
+</span>    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">OTree</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="c1"># input_features None aux</span>
+        <span class="c1"># output_features aux aux</span>
+        <span class="c1"># weight None child</span>
+        <span class="c1"># bias child child</span>
+    <span class="c1"># use layer as a pytree</span>
+    <span class="n">layer_w</span><span class="p">,</span> <span class="n">layer_b</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">layer</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">layer_w</span> <span class="o">==</span> <span class="n">init_weight</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">layer_b</span> <span class="o">==</span> <span class="n">init_bias</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="c1"># flatten and unflatten recovers the layer</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="o">*</span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">layer</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="hll">    <span class="c1"># compute output, notice that jax.jit / jax.vmap works out of the box</span>
+</span><span class="hll">    <span class="n">output</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">forward</span><span class="p">))(</span><span class="n">input_data</span><span class="p">)</span>
+</span>    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="c1"># [[-2.666112   -1.0220472 ]</span>
+    <span class="c1">#  [-3.701102   -0.8207982 ]</span>
+    <span class="c1">#  [-4.4596996   0.6687442 ]</span>
+    <span class="c1">#  [ 0.92416656 -3.302886  ]]</span>
+</pre></div>
+</div>
+<p>For a full-fledged NN library with module system, optimizers, interface with
+impure codebase (e.g., dataloader and log), and fully <code class="docutils literal notranslate"><span class="pre">jit</span></code>-able and
+parallelizable high-level functions for NN training, stay tuned for
+<a class="reference external" href="https://github.com/ysngshn/ojax-nn">OJAX-NN</a>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="OJAX Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Yuesong Shen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

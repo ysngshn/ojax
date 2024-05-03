@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ojax package &mdash; OJAX  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://ysngshn.github.io/ojax/ojax.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API Reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            OJAX
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">OJAX Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example: NN layer with OJAX</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ojax package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.OTree"><code class="docutils literal notranslate"><span class="pre">OTree</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.update"><code class="docutils literal notranslate"><span class="pre">OTree.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.tree_flatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_flatten()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.tree_unflatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_unflatten()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.infer_field_type"><code class="docutils literal notranslate"><span class="pre">OTree.infer_field_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.ignore"><code class="docutils literal notranslate"><span class="pre">ignore()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.aux"><code class="docutils literal notranslate"><span class="pre">aux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.child"><code class="docutils literal notranslate"><span class="pre">child()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.FieldType"><code class="docutils literal notranslate"><span class="pre">FieldType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.FieldType.AUX"><code class="docutils literal notranslate"><span class="pre">FieldType.AUX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.FieldType.CHILD"><code class="docutils literal notranslate"><span class="pre">FieldType.CHILD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.FieldType.IGNORE"><code class="docutils literal notranslate"><span class="pre">FieldType.IGNORE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.get_field_type"><code class="docutils literal notranslate"><span class="pre">get_field_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.new"><code class="docutils literal notranslate"><span class="pre">new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.PureClass"><code class="docutils literal notranslate"><span class="pre">PureClass</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.PureClass.assign_"><code class="docutils literal notranslate"><span class="pre">PureClass.assign_()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.NoAnnotationWarning"><code class="docutils literal notranslate"><span class="pre">NoAnnotationWarning</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OJAX</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">ojax package</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ysngshn/ojax/blob/main/docs/source/ojax.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ojax">
+<span id="ojax-package"></span><h1>ojax package<a class="headerlink" href="#module-ojax" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ojax.OTree">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">OTree</span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree" title="Link to this definition"></a></dt>
+<dd><p>Base “object-like” class for JAX which bundles data (as an immutable
+PyTree) and pure functions.</p>
+<p>The dataclass fields in this class are categorized into three field types:</p>
+<ul class="simple">
+<li><p>auxiliary: metadata that defines the type of the PyTree. They can be
+non-numerical data and should stay static.</p></li>
+<li><p>child: children of this PyTree that hold the numerical data. These are
+typically jax arrays and sub-PyTrees. JAX computations act on this part.</p></li>
+<li><p>ignored: fields that are not part of the PyTree.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Ignored fields are not preserved with a flatten/unflatten transform,
+which is implicitly used by many JAX transforms and functions.</p>
+</div>
+<p>You can explicitly declare the category of each field with
+<a class="reference internal" href="#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a>, <a class="reference internal" href="#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> and <a class="reference internal" href="#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a>. Otherwise, it
+is inferred based on the annotated type of the field: subclasses of
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a> and <a class="reference internal" href="#ojax.OTree" title="ojax.OTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.OTree</span></code></a> are assumed to be child
+fields and the rest are assumed to be auxiliary fields. Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyConv</span><span class="p">(</span><span class="n">ojax</span><span class="o">.</span><span class="n">OTree</span><span class="p">):</span>
+    <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># inferred to be aux</span>
+    <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">ojax</span><span class="o">.</span><span class="n">aux</span><span class="p">()</span>  <span class="c1"># declared to be aux</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># inferred to be child</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span> <span class="o">=</span> <span class="n">ojax</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># declared child</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ojax.OTree.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OTree_T</span></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.update" title="Link to this definition"></a></dt>
+<dd><p>Create a new version of this OTree instance with updated children.</p>
+<p>This method only updates the numerical data and will keep the OTree
+structure and the metadata intact. It is the intended method to
+update the content without changing the PyTree type. If you need to
+create a new OTree with a different metadata / altered structure, use
+<a class="reference internal" href="#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a> instead.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">None</span></code> is a special empty PyTree container. Thus updating numerical
+fields to <code class="docutils literal notranslate"><span class="pre">None</span></code> or vice versa will change the PyTree structure and
+trigger an error.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments specifying new values to be updated for
+the corresponding child fields.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New OTree instance with updated children.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ojax.OTree.tree_flatten">
+<span class="sig-name descname"><span class="pre">tree_flatten</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.tree_flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.tree_flatten" title="Link to this definition"></a></dt>
+<dd><p>Define the flatten behavior of OTree as a PyTree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ojax.OTree.tree_unflatten">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tree_unflatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aux_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OTree_T</span></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.tree_unflatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.tree_unflatten" title="Link to this definition"></a></dt>
+<dd><p>Define the unflatten behavior of OTree as a PyTree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ojax.OTree.infer_field_type">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">infer_field_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ojax.FieldType" title="ojax.otree.FieldType"><span class="pre">FieldType</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.infer_field_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.infer_field_type" title="Link to this definition"></a></dt>
+<dd><p>Infer the OJAX field type from a <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dataclasses.Field</span></code></a> object.</p>
+<p>When <a class="reference internal" href="#ojax.FieldType" title="ojax.FieldType"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.FieldType</span></code></a> is unspecified (when
+<a class="reference internal" href="#ojax.get_field_type" title="ojax.get_field_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_field_type()</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">None</span></code>), the annotated <code class="docutils literal notranslate"><span class="pre">f.type</span></code>
+is used for inference: for subclasses of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a> and
+<a class="reference internal" href="#ojax.OTree" title="ojax.OTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.OTree</span></code></a> are assumed to be child fields and the rest are
+assumed to be auxiliary fields. You can override this method through
+subclass inheritance to change the inference logic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> – a field of <a class="reference internal" href="#ojax.OTree" title="ojax.OTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">OTree</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The inferred <a class="reference internal" href="#ojax.FieldType" title="ojax.FieldType"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.FieldType</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.ignore">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">ignore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#ignore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.ignore" title="Link to this definition"></a></dt>
+<dd><p>Declares an OTree field that is ignored by PyTree creation.</p>
+<p>This function has identical arguments and return as the
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.aux">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.aux" title="Link to this definition"></a></dt>
+<dd><p>Declares an OTree field that holds auxiliary data as part of
+<code class="docutils literal notranslate"><span class="pre">PyTreeDef</span></code>.</p>
+<p>This function has identical arguments and return as the
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.child">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.child" title="Link to this definition"></a></dt>
+<dd><p>Declares an OTree field that holds a child PyTree node.</p>
+<p>This function has identical arguments and return as the
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> function.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ojax.FieldType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">FieldType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#FieldType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.FieldType" title="Link to this definition"></a></dt>
+<dd><p>Choices for OTree field types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.FieldType.AUX">
+<span class="sig-name descname"><span class="pre">AUX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'aux'</span></em><a class="headerlink" href="#ojax.FieldType.AUX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.FieldType.CHILD">
+<span class="sig-name descname"><span class="pre">CHILD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'child'</span></em><a class="headerlink" href="#ojax.FieldType.CHILD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.FieldType.IGNORE">
+<span class="sig-name descname"><span class="pre">IGNORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ignore'</span></em><a class="headerlink" href="#ojax.FieldType.IGNORE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.get_field_type">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">get_field_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ojax.FieldType" title="ojax.otree.FieldType"><span class="pre">FieldType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#get_field_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.get_field_type" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the OJAX field type from a <code class="docutils literal notranslate"><span class="pre">dataclasses.Field</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> – a field of <code class="docutils literal notranslate"><span class="pre">ojax.OTree</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <code class="docutils literal notranslate"><span class="pre">ojax.FieldType</span></code> if available, and <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.new">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pure_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PureClass_T</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PureClass_T</span></span></span><a class="reference internal" href="_modules/ojax/pureclass.html#new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.new" title="Link to this definition"></a></dt>
+<dd><p>Shallow copy-based alternative to <code class="docutils literal notranslate"><span class="pre">dataclasses.replace()</span></code>.</p>
+<p>This function circumvents the instance creation with another <code class="docutils literal notranslate"><span class="pre">__init__</span></code>
+call. It allows direct updates of <code class="docutils literal notranslate"><span class="pre">init=False</span></code> fields and avoids many
+“bad surprises” for custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pure_obj</strong> – An instance of <code class="docutils literal notranslate"><span class="pre">PureClass</span></code> to be updated.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments specifying new values to be updated for
+the corresponding fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ojax.PureClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">PureClass</span></span><a class="reference internal" href="_modules/ojax/pureclass.html#PureClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.PureClass" title="Link to this definition"></a></dt>
+<dd><p>“Record-type” base class with immutable and annotated dataclass fields.</p>
+<p>Direct attribute assignment with “=” is disabled to encourage the immutable
+paradigm. Use the <code class="docutils literal notranslate"><span class="pre">ojax.new</span></code> function to create new instances with
+updated field values instead of in-place updates.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.assign_</span></code> method is provided to initialize fields in custom
+<code class="docutils literal notranslate"><span class="pre">__init__</span></code> methods. It is the low-level impure “dark magic” that normally
+should not be used by the end user in any other context.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ojax.PureClass.assign_">
+<span class="sig-name descname"><span class="pre">assign_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/ojax/pureclass.html#PureClass.assign_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.PureClass.assign_" title="Link to this definition"></a></dt>
+<dd><p>Low-level in-place setting of PureClass instance fields.</p>
+<p>This should only be used during custom instance creation and before the
+first usage of the created instance. It is typically used in custom
+__init__ methods to replace the disabled direct assignment with “=”.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>End users should avoid using this method directly in other cases as
+it can easily break the immutable paradigm and cause potential bugs
+with JAX.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments specifying new values to be updated for
+the corresponding fields.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ojax.NoAnnotationWarning">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">NoAnnotationWarning</span></span><a class="reference internal" href="_modules/ojax/pureclass.html#NoAnnotationWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.NoAnnotationWarning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Yuesong Shen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

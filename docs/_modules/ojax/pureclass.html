@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ojax.pureclass &mdash; OJAX  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://ysngshn.github.io/ojax/_modules/ojax/pureclass.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OJAX
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">OJAX Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example: NN layer with OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OJAX</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ojax.pureclass</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ojax.pureclass</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Customized frozen dataclass for immutable computation.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">dataclass_transform</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">fields</span>
+
+
+<span class="n">PureClass_T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;PureClass_T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;PureClass&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NoAnnotationWarning">
+<a class="viewcode-back" href="../../ojax.html#ojax.NoAnnotationWarning">[docs]</a>
+<span class="k">class</span> <span class="nc">NoAnnotationWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_is_magic_name</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># get non magical and non callable class variables</span>
+<span class="k">def</span> <span class="nf">_get_class_vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">n</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span> <span class="o">:=</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_magic_name</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="p">]</span>
+
+
+<span class="c1"># warn user about non-annotated class variables ambiguous for dataclasses</span>
+<span class="k">def</span> <span class="nf">_warn_no_anno_class_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">anno</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">get_annotations</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+    <span class="n">no_annos</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">_get_class_vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">anno</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">no_annos</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Non-annotated class attributes are ignored by dataclass: </span><span class="si">{</span><span class="n">no_annos</span><span class="si">}</span><span class="s1">.&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; Consider adding annotations and declaring class variables &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;explicitly with typing.ClassVar instead.&#39;</span><span class="p">,</span> <span class="n">NoAnnotationWarning</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PureClass">
+<a class="viewcode-back" href="../../ojax.html#ojax.PureClass">[docs]</a>
+<span class="nd">@dataclass_transform</span><span class="p">(</span><span class="n">frozen_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">PureClass</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;Record-type&quot; base class with immutable and annotated dataclass fields.</span>
+
+<span class="sd">    Direct attribute assignment with &quot;=&quot; is disabled to encourage the immutable</span>
+<span class="sd">    paradigm. Use the ``ojax.new`` function to create new instances with</span>
+<span class="sd">    updated field values instead of in-place updates.</span>
+
+<span class="sd">    The ``.assign_`` method is provided to initialize fields in custom</span>
+<span class="sd">    ``__init__`` methods. It is the low-level impure &quot;dark magic&quot; that normally</span>
+<span class="sd">    should not be used by the end user in any other context.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make each subclass a frozen dataclass.&quot;&quot;&quot;</span>
+
+        <span class="c1"># warn user about potential missing annotation error</span>
+        <span class="n">_warn_no_anno_class_attrs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)(</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Empty __post_init__() for multiple inheritance support.&quot;&quot;&quot;</span>
+
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="PureClass.assign_">
+<a class="viewcode-back" href="../../ojax.html#ojax.PureClass.assign_">[docs]</a>
+    <span class="k">def</span> <span class="nf">assign_</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">PureClass_T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Low-level in-place setting of PureClass instance fields.</span>
+
+<span class="sd">        This should only be used during custom instance creation and before the</span>
+<span class="sd">        first usage of the created instance. It is typically used in custom</span>
+<span class="sd">        __init__ methods to replace the disabled direct assignment with &quot;=&quot;.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">          End users should avoid using this method directly in other cases as</span>
+<span class="sd">          it can easily break the immutable paradigm and cause potential bugs</span>
+<span class="sd">          with JAX.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kwargs: Keyword arguments specifying new values to be updated for</span>
+<span class="sd">                the corresponding fields.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">field_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">arg_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">arg_names</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">field_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unrecognized fields: </span><span class="si">{</span><span class="n">arg_names</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="new">
+<a class="viewcode-back" href="../../ojax.html#ojax.new">[docs]</a>
+<span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">pure_obj</span><span class="p">:</span> <span class="n">PureClass_T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PureClass_T</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shallow copy-based alternative to ``dataclasses.replace()``.</span>
+
+<span class="sd">    This function circumvents the instance creation with another ``__init__``</span>
+<span class="sd">    call. It allows direct updates of ``init=False`` fields and avoids many</span>
+<span class="sd">    &quot;bad surprises&quot; for custom ``__init__`` functions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pure_obj: An instance of ``PureClass`` to be updated.</span>
+<span class="sd">        **kwargs: Keyword arguments specifying new values to be updated for</span>
+<span class="sd">            the corresponding fields.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The updated instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">new_obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">pure_obj</span><span class="p">)</span>
+    <span class="n">new_obj</span><span class="o">.</span><span class="n">assign_</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_obj</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Yuesong Shen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

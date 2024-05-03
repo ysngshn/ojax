@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ojax.otree &mdash; OJAX  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://ysngshn.github.io/ojax/_modules/ojax/otree.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OJAX
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">OJAX Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example: NN layer with OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OJAX</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ojax.otree</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ojax.otree</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pureclass</span>
+
+
+<div class="viewcode-block" id="FieldType">
+<a class="viewcode-back" href="../../ojax.html#ojax.FieldType">[docs]</a>
+<span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
+<span class="k">class</span> <span class="nc">FieldType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">StrEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Choices for OTree field types.&quot;&quot;&quot;</span>
+    
+    <span class="n">AUX</span> <span class="o">=</span> <span class="s2">&quot;aux&quot;</span>
+    <span class="n">CHILD</span> <span class="o">=</span> <span class="s2">&quot;child&quot;</span>
+    <span class="n">IGNORE</span> <span class="o">=</span> <span class="s2">&quot;ignore&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="get_field_type">
+<a class="viewcode-back" href="../../ojax.html#ojax.get_field_type">[docs]</a>
+<span class="k">def</span> <span class="nf">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldType</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve the OJAX field type from a ``dataclasses.Field`` object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f: a field of ``ojax.OTree``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The ``ojax.FieldType`` if available, and ``None`` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ojax-field-type&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="aux">
+<a class="viewcode-back" href="../../ojax.html#ojax.aux">[docs]</a>
+<span class="k">def</span> <span class="nf">aux</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">default_factory</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">compare</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Declares an OTree field that holds auxiliary data as part of</span>
+<span class="sd">    ``PyTreeDef``.</span>
+
+<span class="sd">    This function has identical arguments and return as the</span>
+<span class="sd">    :obj:`dataclasses.field` function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">metadata</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ojax-field-type&quot;</span><span class="p">:</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">}</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">default</span><span class="p">,</span>
+        <span class="s2">&quot;default_factory&quot;</span><span class="p">:</span> <span class="n">default_factory</span><span class="p">,</span>
+        <span class="s2">&quot;init&quot;</span><span class="p">:</span> <span class="n">init</span><span class="p">,</span>
+        <span class="s2">&quot;repr&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">,</span>
+        <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="nb">hash</span><span class="p">,</span>
+        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">compare</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># OTree field which holds a child PyTree node</span>
+<div class="viewcode-block" id="child">
+<a class="viewcode-back" href="../../ojax.html#ojax.child">[docs]</a>
+<span class="k">def</span> <span class="nf">child</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">default_factory</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">compare</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Declares an OTree field that holds a child PyTree node.</span>
+
+<span class="sd">    This function has identical arguments and return as the</span>
+<span class="sd">    :obj:`dataclasses.field` function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">metadata</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ojax-field-type&quot;</span><span class="p">:</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">}</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">default</span><span class="p">,</span>
+        <span class="s2">&quot;default_factory&quot;</span><span class="p">:</span> <span class="n">default_factory</span><span class="p">,</span>
+        <span class="s2">&quot;init&quot;</span><span class="p">:</span> <span class="n">init</span><span class="p">,</span>
+        <span class="s2">&quot;repr&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">,</span>
+        <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="nb">hash</span><span class="p">,</span>
+        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">compare</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ignore">
+<a class="viewcode-back" href="../../ojax.html#ojax.ignore">[docs]</a>
+<span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">default_factory</span><span class="o">=</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">compare</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Declares an OTree field that is ignored by PyTree creation.</span>
+
+<span class="sd">    This function has identical arguments and return as the</span>
+<span class="sd">    :obj:`dataclasses.field` function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">metadata</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ojax-field-type&quot;</span><span class="p">:</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">}</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">default</span><span class="p">,</span>
+        <span class="s2">&quot;default_factory&quot;</span><span class="p">:</span> <span class="n">default_factory</span><span class="p">,</span>
+        <span class="s2">&quot;init&quot;</span><span class="p">:</span> <span class="n">init</span><span class="p">,</span>
+        <span class="s2">&quot;repr&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">,</span>
+        <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="nb">hash</span><span class="p">,</span>
+        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">compare</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="n">OTree_T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;OTree_T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;OTree&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="OTree">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree">[docs]</a>
+<span class="k">class</span> <span class="nc">OTree</span><span class="p">(</span><span class="n">pureclass</span><span class="o">.</span><span class="n">PureClass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base &quot;object-like&quot; class for JAX which bundles data (as an immutable</span>
+<span class="sd">    PyTree) and pure functions.</span>
+
+<span class="sd">    The dataclass fields in this class are categorized into three field types:</span>
+
+<span class="sd">    * auxiliary: metadata that defines the type of the PyTree. They can be</span>
+<span class="sd">      non-numerical data and should stay static.</span>
+<span class="sd">    * child: children of this PyTree that hold the numerical data. These are</span>
+<span class="sd">      typically jax arrays and sub-PyTrees. JAX computations act on this part.</span>
+<span class="sd">    * ignored: fields that are not part of the PyTree.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">      Ignored fields are not preserved with a flatten/unflatten transform,</span>
+<span class="sd">      which is implicitly used by many JAX transforms and functions.</span>
+
+<span class="sd">    You can explicitly declare the category of each field with</span>
+<span class="sd">    :meth:`ojax.aux`, :meth:`ojax.child` and :meth:`ojax.ignore`. Otherwise, it</span>
+<span class="sd">    is inferred based on the annotated type of the field: subclasses of</span>
+<span class="sd">    :class:`jax.Array` and :class:`ojax.OTree` are assumed to be child</span>
+<span class="sd">    fields and the rest are assumed to be auxiliary fields. Example usage:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        class MyConv(ojax.OTree):</span>
+<span class="sd">            out_channels: int  # inferred to be aux</span>
+<span class="sd">            kernel_size: int = ojax.aux()  # declared to be aux</span>
+<span class="sd">            weight: jax.numpy.ndarray  # inferred to be child</span>
+<span class="sd">            bias: jax.Array = ojax.child(default=None)  # declared child</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make each subclass a :class:`ojax.PureClass` and a PyTree.&quot;&quot;&quot;</span>
+        
+        <span class="n">purecls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node_class</span><span class="p">(</span><span class="n">purecls</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OTree.update">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">OTree_T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OTree_T</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new version of this OTree instance with updated children.</span>
+
+<span class="sd">        This method only updates the numerical data and will keep the OTree </span>
+<span class="sd">        structure and the metadata intact. It is the intended method to </span>
+<span class="sd">        update the content without changing the PyTree type. If you need to </span>
+<span class="sd">        create a new OTree with a different metadata / altered structure, use</span>
+<span class="sd">        :py:meth:`ojax.new` instead.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">          ``None`` is a special empty PyTree container. Thus updating numerical</span>
+<span class="sd">          fields to ``None`` or vice versa will change the PyTree structure and</span>
+<span class="sd">          trigger an error.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kwargs: Keyword arguments specifying new values to be updated for</span>
+<span class="sd">                the corresponding child fields.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            New OTree instance with updated children.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">aux_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span>
+        <span class="p">)</span>
+        <span class="n">aux_args</span> <span class="o">=</span> <span class="n">aux_names</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aux_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;update of keys </span><span class="si">{</span><span class="n">aux_args</span><span class="si">}</span><span class="s1"> not allowed, use &quot;ojax.new()&quot; &#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;instead to create instance of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; different PyTree structure.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">old_v</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">old_v</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;PyTree structure mismatch at key </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;expected</span><span class="se">\n</span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">old_v</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;received</span><span class="se">\n</span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">pureclass</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OTree.tree_flatten">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree.tree_flatten">[docs]</a>
+    <span class="k">def</span> <span class="nf">tree_flatten</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define the flatten behavior of OTree as a PyTree.&quot;&quot;&quot;</span>
+
+        <span class="n">tree_leaves</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">num_arrays</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">aux_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">:</span>
+                <span class="n">aux_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+                <span class="n">num_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span><span class="p">:</span>
+                <span class="n">entry</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">entry_leaves</span><span class="p">,</span> <span class="n">entry_aux</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="n">tree_leaves</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entry_leaves</span><span class="p">)</span>
+                <span class="n">aux_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry_aux</span><span class="p">)</span>
+                <span class="n">num_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry_leaves</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tree_leaves</span><span class="p">),</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">num_arrays</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">aux_values</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="OTree.tree_unflatten">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree.tree_unflatten">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tree_unflatten</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">OTree_T</span><span class="p">],</span>
+        <span class="n">aux_data</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">],</span>
+        <span class="n">children</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OTree_T</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define the unflatten behavior of OTree as a PyTree.&quot;&quot;&quot;</span>
+        
+        <span class="n">num_arrays</span><span class="p">,</span> <span class="n">aux_values</span> <span class="o">=</span> <span class="n">aux_data</span>
+        <span class="n">num_arrays</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">num_arrays</span><span class="p">)</span>
+        <span class="n">aux_values_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">aux_values</span><span class="p">)</span>
+        <span class="n">tree_children</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">:</span>
+                <span class="n">tree_children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">aux_values_iter</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">num_arrays</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">child_leaves</span> <span class="o">=</span> <span class="n">children</span><span class="p">[</span><span class="n">offset</span> <span class="p">:</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">count</span><span class="p">]</span>
+                <span class="n">tree_child</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span>
+                    <span class="nb">next</span><span class="p">(</span><span class="n">aux_values_iter</span><span class="p">),</span> <span class="n">child_leaves</span>
+                <span class="p">)</span>
+                <span class="n">tree_children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree_child</span>
+                <span class="n">offset</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="c1"># alternative to cls.__init__ since it might be custom</span>
+        <span class="n">otree</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">otree</span><span class="o">.</span><span class="n">assign_</span><span class="p">(</span><span class="o">**</span><span class="n">tree_children</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">otree</span></div>
+
+
+<div class="viewcode-block" id="OTree.infer_field_type">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree.infer_field_type">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">infer_field_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldType</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Infer the OJAX field type from a :class:`dataclasses.Field` object.</span>
+
+<span class="sd">        When :class:`ojax.FieldType` is unspecified (when</span>
+<span class="sd">        :py:meth:`get_field_type` returns ``None``), the annotated ``f.type``</span>
+<span class="sd">        is used for inference: for subclasses of :class:`jax.Array` and</span>
+<span class="sd">        :class:`ojax.OTree` are assumed to be child fields and the rest are</span>
+<span class="sd">        assumed to be auxiliary fields. You can override this method through</span>
+<span class="sd">        subclass inheritance to change the inference logic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            f: a field of :class:`OTree`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The inferred :class:`ojax.FieldType`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f_type</span> <span class="o">=</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">f_type</span>
+            <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="p">(</span><span class="n">OTree</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># issubclass fails if f.type is not a proper class</span>
+            <span class="k">return</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Yuesong Shen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

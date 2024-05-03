@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OJAX Quickstart &mdash; OJAX  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://ysngshn.github.io/ojax/quickstart.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example: NN layer with OJAX" href="example.html" />
+    <link rel="prev" title="Installing OJAX" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            OJAX
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing OJAX</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">OJAX Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#declaring-annotated-fields">Declaring annotated fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#field-types-for-otree">Field types for OTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-init-method">The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-fields">Updating the fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-jax-methods">Adding JAX methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-coding-tips">General coding tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example: NN layer with OJAX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OJAX</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">OJAX Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ysngshn/ojax/blob/main/docs/source/quickstart.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ojax-quickstart">
+<h1>OJAX Quickstart<a class="headerlink" href="#ojax-quickstart" title="Link to this heading"></a></h1>
+<p>The core component of OJAX is the <a class="reference internal" href="ojax.html#ojax.OTree" title="ojax.OTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree()</span></code></a> class, which represents
+an immutable <a class="reference external" href="https://jax.readthedocs.io/en/latest/pytrees.html">PyTree</a> and uses Python dataclass field declaration. It is
+implemented using <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#frozen-instances">frozen dataclass</a> which is a standard Python feature, and
+it serves as a base class for all custom JAX-compatible classes.</p>
+<section id="declaring-annotated-fields">
+<h2>Declaring annotated fields<a class="headerlink" href="#declaring-annotated-fields" title="Link to this heading"></a></h2>
+<p>Unlike standard Python <code class="docutils literal notranslate"><span class="pre">class</span></code> where fields are dynamically added via
+<code class="docutils literal notranslate"><span class="pre">self.field_name</span> <span class="pre">=</span> <span class="pre">value</span></code>, OTree adopts the annotated field syntax from
+Python <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html">dataclass</a> and expects you to declare fields with type annotation.
+This is more in line with the functional paradigm employed by JAX.</p>
+<p>Here is an example (code excerpt from the <a class="reference internal" href="example.html"><span class="doc">full example</span></a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">OTree</span><span class="p">):</span>
+    <span class="n">input_features</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># inferred to be auxiliary data</span>
+    <span class="n">output_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">aux</span><span class="p">()</span>  <span class="c1"># or explicit declaration</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># inferred as child</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">child</span><span class="p">(</span><span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># explicit declaration</span>
+</pre></div>
+</div>
+<p>Annotated fields can have the following patterns:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">default_value</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">dataclasses.field()</span></code> with optional <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field">dataclasses.field</a>
+arguments such as <code class="docutils literal notranslate"><span class="pre">default</span></code> / <code class="docutils literal notranslate"><span class="pre">default_factory</span></code> and <code class="docutils literal notranslate"><span class="pre">init</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span> <span class="pre">=</span></code><a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
+<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> with the same optional arguments as <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field">dataclasses.field</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Type annotation is required because Python dataclass uses it to
+identify fields. Attributes without type annotation are ignored by dataclass
+and become class variables instead of dataclass fields. OTree raises a
+warning for you in this case so don’t worry about accidentally making class
+variables instead of fields :)</p>
+<p>If you want to create a class variable, declare it explicitly with
+<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.ClassVar</span></code></a> so you won’t be nagged by this warning.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Doing accurate type annotation is helpful but not required. It helps OTree to
+infer how to handle the fields as a PyTree. No need to think too hard though,
+declaring everything as <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Any</span></code></a> is also fine, and the PyTree
+handling can be specified explicitly in any case.</p>
+</div>
+<p>In the last pattern, <a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
+<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also
+specifies how an OTree should handle a field as a PyTree. Let’s discuss this
+point further.</p>
+</section>
+<section id="field-types-for-otree">
+<h2>Field types for OTree<a class="headerlink" href="#field-types-for-otree" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://jax.readthedocs.io/en/latest/pytrees.html">PyTree</a> is the data structure used by JAX to operate on data collections. It
+is composed of a definition part and a content part, and JAX operations act on
+the content part. OTree is registered as a PyTree, and thus should decide on
+how to handle its data fields. For this, fields in OTree are partitioned into
+three field types:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Auxiliary fields</dt><dd><p>These are the fields that will be part of the PyTree definition. They are
+supposed to be static metadata that describe the characteristics of the
+OTree. They can be explicitly declared with <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Children fields</dt><dd><p>These are the numerical content of the OTree which is the subject of JAX
+operations. They are typically JAX arrays and sub-PyTrees and can be marked
+explicitly with <a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Ignored fields</dt><dd><p>These are dataclass fields that are not part of the PyTree. They are
+declared with <a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Ignore fields are not preserved after the <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.tree.flatten.html#jax.tree.flatten" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.tree.flatten</span></code></a> then
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.tree.unflatten.html#jax.tree.unflatten" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.tree.unflatten</span></code></a> transformations. Since this combo is used by common
+JAX operations to handle PyTrees, ignore fields will easily get lost. Users
+should stick with auxiliary and children fields by default.</p>
+</div>
+<p>For fields without explicit field type declaration, OTree infers the field type
+based on the field annotation: subclasses of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a> and
+<a class="reference internal" href="ojax.html#ojax.OTree" title="ojax.OTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.OTree</span></code></a> are assumed to be child nodes, while the rest are assumed
+to be aux nodes. This inference logic is specified in the
+<a class="reference internal" href="ojax.html#ojax.OTree.infer_field_type" title="ojax.OTree.infer_field_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.infer_field_type()</span></code></a> method and can be overridden by subclasses.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Non-OTree PyTrees such as lists of JAX arrays are not automatically detected
+as child nodes. The current inference logic only conservatively tackles the
+obvious case for your convenience. You need to explicitly handle child node
+declarations for more complex cases.</p>
+</div>
+</section>
+<section id="the-init-method">
+<h2>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method<a class="headerlink" href="#the-init-method" title="Link to this heading"></a></h2>
+<p>After the declaration comes the instantiation part. Luckily Python dataclass
+can automatically generate an <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method based on the field
+declaration. This function directly assigns the arguments to the corresponding
+fields. For instance, the following commented code segment from the
+<a class="reference internal" href="example.html"><span class="doc">full example</span></a> shows a custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method that
+implements what is automatically generated by the Python dataclass.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># # optional here, automatically generated by the dataclass</span>
+    <span class="c1"># def __init__(self, input_features: int, output_features: int):</span>
+    <span class="c1">#     self.assign_(</span>
+    <span class="c1">#         input_features=input_features, output_features=output_features</span>
+    <span class="c1">#     )</span>
+</pre></div>
+</div>
+<p>This automatic generation is convenient for basic cases but has its limits for
+complex cases such as additional checks or some inheritance cases<a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. In
+these cases, one should instead implement a custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method.</p>
+<p>One thing to note is that the usual <code class="docutils literal notranslate"><span class="pre">self.field</span> <span class="pre">=</span> <span class="pre">value</span></code> assignment pattern
+is no longer possible for OTree, as it is a frozen dataclass. Instead, OTree
+offers an <code class="docutils literal notranslate"><span class="pre">.assign_</span></code> method to achieve this (inherited from the
+<a class="reference internal" href="ojax.html#ojax.PureClass.assign_" title="ojax.PureClass.assign_"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.PureClass.assign_()</span></code></a> method, where <a class="reference internal" href="ojax.html#ojax.PureClass" title="ojax.PureClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.PureClass</span></code></a> defines an
+immutable dataclass).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As a dataclass, it is also possible to use the
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.__post_init__" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.__post_init__</span></code></a> method and <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#init-only-variables">InitVar</a> to customize the
+initialization process of OTrees. However, this requires more expertise with
+the Python dataclass structure and can be less intuitive than a custom
+<code class="docutils literal notranslate"><span class="pre">__init__</span></code> method for many Python users. Moreover, inheriting from a bass
+class with custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> can be problematic.</p>
+</div>
+</section>
+<section id="updating-the-fields">
+<h2>Updating the fields<a class="headerlink" href="#updating-the-fields" title="Link to this heading"></a></h2>
+<p>During JAX computations, it is sometimes desirable to update the numerical
+fields of OTrees. To achieve this, OTree provides the <a class="reference internal" href="ojax.html#ojax.OTree.update" title="ojax.OTree.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.update()</span></code></a>
+method, which returns an updated OTree instance with the specified new
+numerical data for the children fields.</p>
+<p><a class="reference internal" href="ojax.html#ojax.OTree.update" title="ojax.OTree.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.update()</span></code></a> preserves the PyTree structure and disallows updating
+auxiliary fields. This is usually the intended behavior since JAX operations
+don’t alter the PyTree structure either. It is also a requirement for JAX
+functions such as <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.scan.html#jax.lax.scan" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.lax.scan</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">None</span></code> is a special empty PyTree container. Thus updating numerical fields
+to <code class="docutils literal notranslate"><span class="pre">None</span></code> or vice versa will change the PyTree structure and trigger an
+error from the <code class="docutils literal notranslate"><span class="pre">.update()</span></code> method.</p>
+</div>
+<p>In case you need to create a derived OTree with different auxiliary data or
+PyTree structure, the <a class="reference internal" href="ojax.html#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a> method should be used instead.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Again, Python dataclass offers the <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.replace" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.replace</span></code></a> method for
+updating dataclasses fields. However, it also does not preserve the PyTree
+structure, similar to <a class="reference internal" href="ojax.html#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a>. Furthermore, it relies on re-calling
+the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method to generate the new instance and can be problematic
+for OTrees with custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method. <a class="reference internal" href="ojax.html#ojax.OTree.update" title="ojax.OTree.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.update()</span></code></a> and
+<a class="reference internal" href="ojax.html#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a> rely on shallow copy instead and don’t have such issue.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.assign_</span></code> method introduced previously should not be used for updating
+the fields of OTrees. It is a low-level in-place operation that should only
+be used within the initialization functions. Otherwise the immutable paradigm
+is easily violated, potentially creating issues and subtle bugs for JAX code.</p>
+</div>
+</section>
+<section id="adding-jax-methods">
+<h2>Adding JAX methods<a class="headerlink" href="#adding-jax-methods" title="Link to this heading"></a></h2>
+<p>Of course, you are free to add custom methods just like how it is done for
+vanilla Python classes. Here is an example (another excerpt from the
+<a class="reference internal" href="example.html"><span class="doc">full example</span></a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">OTree</span><span class="p">):</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">input_array</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+</pre></div>
+</div>
+<p>As an OTree is also a PyTree that JAX operations can handle, all its methods
+(which have <code class="docutils literal notranslate"><span class="pre">self</span></code> as their first argument) can directly work with JAX
+transforms including <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html#jax.jit" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.jit</span></code></a>.</p>
+<p>While there is no easy way to enforce it in Python, the OTree methods should be
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#pure-functions">pure JAX functions</a> so as to avoid potential issues when working with JAX.</p>
+</section>
+<section id="general-coding-tips">
+<h2>General coding tips<a class="headerlink" href="#general-coding-tips" title="Link to this heading"></a></h2>
+<p>To avoid <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">“bad surprises”</a> when coding with JAX / OJAX, always follow the two
+principles below:</p>
+<ul class="simple">
+<li><p>Data should be persistent: no in-place operations, data should be immutable.</p></li>
+<li><p>Functions should be pure: no side-effect, a function with the same argument
+should always return the same result and without other effects.</p></li>
+</ul>
+<p>These principles are the basis of functional programming and are assumed by
+JAX, however it is not enforced in Python as an OOP language.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>When inheriting a base class where some fields have default values, if
+the current class has any field without default value, a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> will
+be raised. Quoting
+<a class="reference external" href="https://peps.python.org/pep-0557/#specification">PEP-557</a>: “TypeError will
+be raised if a field without a default value follows a field with a default
+value. This is true either when this occurs in a single class, or as a result
+of class inheritance.”</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installing OJAX" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example.html" class="btn btn-neutral float-right" title="Example: NN layer with OJAX" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Yuesong Shen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
