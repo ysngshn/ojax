@@ -1,7 +1,9 @@
-.. include:: logo.rst
+:orphan:
 
 OJAX
 ====
+
+.. include:: logo.rst
 
 `Github <https://github.com/ysngshn/ojax>`_ | `Documentation <https://ysngshn.github.io/ojax>`_
 

@@ -8,6 +8,9 @@
 .. _.quickstart+quickstart section: https://ysngshn.github.io/ojax/quickstart.html
 
 
+OJAX
+====
+
 ::
 
     +-------------------------------------+
@@ -25,9 +28,6 @@
     |                                     |
     +-------------------------------------+
 
-
-OJAX
-====
 
 `Github <https://github.com/ysngshn/ojax>`_ | `Documentation <https://ysngshn.github.io/ojax>`_
 

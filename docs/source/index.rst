@@ -17,11 +17,6 @@ Welcome to OJAX's documentation!
   example
   modules
 
-.. toctree::
-  :hidden:
-
-  readme
-
 Indices and tables
 ==================
 
