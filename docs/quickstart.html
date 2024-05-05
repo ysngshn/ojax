@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OJAX Quickstart &mdash; OJAX  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -176,7 +176,8 @@ should stick with auxiliary and children fields by default.</p>
 based on the field annotation: subclasses of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a> and
 <a class="reference internal" href="ojax.html#ojax.OTree" title="ojax.OTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.OTree</span></code></a> are assumed to be child nodes, while the rest are assumed
 to be aux nodes. This inference logic is specified in the
-<a class="reference internal" href="ojax.html#ojax.OTree.infer_field_type" title="ojax.OTree.infer_field_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.infer_field_type()</span></code></a> method and can be overridden by subclasses.</p>
+<a class="reference internal" href="ojax.html#ojax.OTree.__infer_otree_field_type__" title="ojax.OTree.__infer_otree_field_type__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.__infer_otree_field_type__()</span></code></a> method and can be overridden by
+subclasses.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Non-OTree PyTrees such as lists of JAX arrays are not automatically detected

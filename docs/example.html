@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example: NN layer with OJAX &mdash; OJAX  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -88,11 +88,11 @@ And they work as intended.</p></li>
 <li><p>OJAX is “pure like JAX”: no in-place update. New instances with updated
 states are always returned instead.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax.random</span> <span class="kn">import</span> <span class="n">PRNGKey</span><span class="p">,</span> <span class="n">split</span> <span class="k">as</span> <span class="n">jrsplit</span><span class="p">,</span> <span class="n">normal</span> <span class="k">as</span> <span class="n">jrnormal</span>
-<span class="kn">from</span> <span class="nn">ojax</span> <span class="kn">import</span> <span class="n">aux</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">OTree</span><span class="p">,</span> <span class="n">get_field_type</span>
+<span class="kn">from</span> <span class="nn">ojax</span> <span class="kn">import</span> <span class="n">aux</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">OTree</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="c1"># defines a fully connected layer for neural networks</span>
@@ -133,7 +133,7 @@ states are always returned instead.</p></li>
 <span class="hll">    <span class="c1"># No inplace update, need to get the returned updated layer instance!</span>
 </span><span class="hll">    <span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">init_weight</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">init_bias</span><span class="p">)</span>
 </span>    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">OTree</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">OTree</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
         <span class="c1"># input_features None aux</span>
         <span class="c1"># output_features aux aux</span>
         <span class="c1"># weight None child</span>

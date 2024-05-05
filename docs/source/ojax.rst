@@ -10,6 +10,7 @@ ojax package
     ignore,
     aux,
     child,
+    fields,
     FieldType,
     get_field_type
   :undoc-members:

@@ -1,8 +1,8 @@
-from dataclasses import field, fields
+from dataclasses import field
 import jax
 import jax.numpy as jnp
 from jax.random import PRNGKey, split as jrsplit, normal as jrnormal
-from ojax import aux, child, OTree, get_field_type
+from ojax import aux, child, OTree, get_field_type, fields
 
 
 # defines a fully connected layer for neural networks
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # No inplace update, need to get the returned updated layer instance!
     layer = layer.update_parameters(weight=init_weight, bias=init_bias)
     for f in fields(layer):
-        print(f.name, get_field_type(f), OTree.infer_field_type(f))
+        print(f.name, get_field_type(f), OTree.__infer_otree_field_type__(f))
         # input_features None aux
         # output_features aux aux
         # weight None child

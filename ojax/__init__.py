@@ -5,6 +5,7 @@ from .otree import (
     aux,
     child,
     FieldType,
+    fields,
     get_field_type,
 )
 from .pureclass import (
@@ -14,5 +15,5 @@ from .pureclass import (
 )
 
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 

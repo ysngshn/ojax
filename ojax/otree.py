@@ -1,6 +1,7 @@
 from typing import (
     TypeVar,
     Optional,
+    Union,
     Sequence,
 )
 import enum
@@ -29,6 +30,42 @@ def get_field_type(f: dataclasses.Field) -> Optional[FieldType]:
     """
 
     return f.metadata.get("ojax-field-type")
+
+
+def fields(
+        otree: Union["OTree", "type(OTree)"],
+        field_type: Optional[FieldType] = None,
+        infer: bool = True,
+) -> tuple[dataclasses.Field, ...]:
+    """Convenience function extending dataclasses.fields() that can filter
+    fields by OTree field type.
+
+    Args:
+        otree: the OTree instance to examine.
+        field_type: if not None, specifies the field type to filter the list of
+            fields from OTree.
+        infer: determines if the field type should be inferred in case it is
+            not available. Has no effect when ``field_type = None``.
+
+    Returns:
+        A tuple of fields from the given OTree.
+    """
+
+    if field_type is not None and field_type not in FieldType:
+        raise ValueError(f"{field_type} is not a FieldType.")
+    t_fields = dataclasses.fields(otree)
+    if field_type is None:
+        return t_fields
+    else:
+        if infer:
+            return tuple(
+                f for f in t_fields
+                if otree.__infer_otree_field_type__(f) is field_type
+            )
+        else:
+            return tuple(
+                f for f in t_fields if get_field_type(f) is field_type
+            )
 
 
 def aux(
@@ -185,19 +222,21 @@ class OTree(pureclass.PureClass):
             New OTree instance with updated children.
         """
 
-        aux_names = set(
-            f.name
-            for f in dataclasses.fields(self)
-            if self.infer_field_type(f) is FieldType.AUX
-        )
-        aux_args = aux_names.intersection(kwargs.keys())
+        aux_args = set(
+            f.name for f in fields(self, FieldType.AUX, True)
+        ).intersection(kwargs.keys())
         if len(aux_args) != 0:
             raise ValueError(
                 f'update of keys {aux_args} not allowed, use "ojax.new()" '
-                f"instead to create instance of {self.__class__.__name__} with"
-                f" different PyTree structure."
+                f"instead to create new instances of {self.__class__.__name__}"
+                f" with updated auxiliary fields."
             )
+        child_names = set(
+            f.name for f in fields(self, FieldType.CHILD, True)
+        )
         for k, v in kwargs.items():
+            if k not in child_names:
+                continue
             old_v = object.__getattribute__(self, k)
             if jax.tree.structure(v) != jax.tree.structure(old_v):
                 raise ValueError(
@@ -215,8 +254,8 @@ class OTree(pureclass.PureClass):
         tree_leaves = []
         num_arrays = []
         aux_values = []
-        for f in dataclasses.fields(self):
-            name, ftype = f.name, self.infer_field_type(f)
+        for f in fields(self):
+            name, ftype = f.name, self.__infer_otree_field_type__(f)
             if ftype is FieldType.AUX:
                 aux_values.append(getattr(self, name))
                 num_arrays.append((name, 0))
@@ -245,8 +284,8 @@ class OTree(pureclass.PureClass):
         aux_values_iter = iter(aux_values)
         tree_children = {}
         offset = 0
-        for f in dataclasses.fields(cls):
-            name, ftype = f.name, cls.infer_field_type(f)
+        for f in fields(cls):
+            name, ftype = f.name, cls.__infer_otree_field_type__(f)
             if ftype is FieldType.AUX:
                 tree_children[name] = next(aux_values_iter)
             elif ftype is FieldType.CHILD:
@@ -267,7 +306,7 @@ class OTree(pureclass.PureClass):
         return otree
 
     @classmethod
-    def infer_field_type(cls, f: dataclasses.Field) -> FieldType:
+    def __infer_otree_field_type__(cls, f: dataclasses.Field) -> FieldType:
         """Infer the OJAX field type from a :class:`dataclasses.Field` object.
 
         When :class:`ojax.FieldType` is unspecified (when

@@ -10,7 +10,7 @@ important characteristics of OJAX:
 * OJAX is "pure like JAX": no in-place update. New instances with updated
   states are always returned instead.
 
-.. literalinclude:: ../../test/test_example.py
+.. literalinclude:: ../../tests/test_example.py
   :language: python
   :emphasize-lines: 23,29,43-44,56-57
 

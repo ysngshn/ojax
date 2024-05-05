@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ojax package &mdash; OJAX  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -55,7 +55,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.update"><code class="docutils literal notranslate"><span class="pre">OTree.update()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.tree_flatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_flatten()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.tree_unflatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_unflatten()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.infer_field_type"><code class="docutils literal notranslate"><span class="pre">OTree.infer_field_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ojax.OTree.__infer_otree_field_type__"><code class="docutils literal notranslate"><span class="pre">OTree.__infer_otree_field_type__()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#ojax.ignore"><code class="docutils literal notranslate"><span class="pre">ignore()</span></code></a></li>
@@ -67,6 +67,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#ojax.FieldType.IGNORE"><code class="docutils literal notranslate"><span class="pre">FieldType.IGNORE</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#ojax.fields"><code class="docutils literal notranslate"><span class="pre">fields()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ojax.get_field_type"><code class="docutils literal notranslate"><span class="pre">get_field_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ojax.new"><code class="docutils literal notranslate"><span class="pre">new()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ojax.PureClass"><code class="docutils literal notranslate"><span class="pre">PureClass</span></code></a><ul>
@@ -176,8 +177,8 @@ the corresponding child fields.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ojax.OTree.infer_field_type">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">infer_field_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ojax.FieldType" title="ojax.otree.FieldType"><span class="pre">FieldType</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.infer_field_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.infer_field_type" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ojax.OTree.__infer_otree_field_type__">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__infer_otree_field_type__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ojax.FieldType" title="ojax.otree.FieldType"><span class="pre">FieldType</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#OTree.__infer_otree_field_type__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTree.__infer_otree_field_type__" title="Link to this definition"></a></dt>
 <dd><p>Infer the OJAX field type from a <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dataclasses.Field</span></code></a> object.</p>
 <p>When <a class="reference internal" href="#ojax.FieldType" title="ojax.FieldType"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.FieldType</span></code></a> is unspecified (when
 <a class="reference internal" href="#ojax.get_field_type" title="ojax.get_field_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_field_type()</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">None</span></code>), the annotated <code class="docutils literal notranslate"><span class="pre">f.type</span></code>
@@ -224,7 +225,7 @@ subclass inheritance to change the inference logic.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.FieldType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">FieldType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#FieldType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.FieldType" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">FieldType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#FieldType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.FieldType" title="Link to this definition"></a></dt>
 <dd><p>Choices for OTree field types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ojax.FieldType.AUX">
@@ -241,6 +242,27 @@ subclass inheritance to change the inference logic.</p>
 <span class="sig-name descname"><span class="pre">IGNORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ignore'</span></em><a class="headerlink" href="#ojax.FieldType.IGNORE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.fields">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">otree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ojax.OTree" title="ojax.otree.OTree"><span class="pre">OTree</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><span class="pre">type</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ojax.FieldType" title="ojax.otree.FieldType"><span class="pre">FieldType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.12)"><span class="pre">Field</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ojax/otree.html#fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.fields" title="Link to this definition"></a></dt>
+<dd><p>Convenience function extending dataclasses.fields() that can filter
+fields by OTree field type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>otree</strong> – the OTree instance to examine.</p></li>
+<li><p><strong>field_type</strong> – if not None, specifies the field type to filter the list of
+fields from OTree.</p></li>
+<li><p><strong>infer</strong> – determines if the field type should be inferred in case it is
+not available. Has no effect when <code class="docutils literal notranslate"><span class="pre">field_type</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of fields from the given OTree.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

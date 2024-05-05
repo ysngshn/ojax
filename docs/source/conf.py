@@ -26,7 +26,6 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
@@ -42,6 +41,18 @@ github_url = "https://ysngshn.github.io/ojax"
 
 # autodoc config
 autodoc_member_order = 'bysource'
+
+
+# document __infer_otree_field_type__
+def autodoc_custom_skip(app, what, name, obj, would_skip, options):
+    if name == "__infer_otree_field_type__":
+        return False
+    return would_skip
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", autodoc_custom_skip)
+
 
 # intersphinx config
 intersphinx_mapping = {

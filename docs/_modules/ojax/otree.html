@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ojax.otree &mdash; OJAX  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
   
@@ -78,6 +78,7 @@
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">TypeVar</span><span class="p">,</span>
     <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
     <span class="n">Sequence</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">enum</span>
@@ -111,6 +112,45 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ojax-field-type&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fields">
+<a class="viewcode-back" href="../../ojax.html#ojax.fields">[docs]</a>
+<span class="k">def</span> <span class="nf">fields</span><span class="p">(</span>
+        <span class="n">otree</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;OTree&quot;</span><span class="p">,</span> <span class="s2">&quot;type(OTree)&quot;</span><span class="p">],</span>
+        <span class="n">field_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">infer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convenience function extending dataclasses.fields() that can filter</span>
+<span class="sd">    fields by OTree field type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        otree: the OTree instance to examine.</span>
+<span class="sd">        field_type: if not None, specifies the field type to filter the list of</span>
+<span class="sd">            fields from OTree.</span>
+<span class="sd">        infer: determines if the field type should be inferred in case it is</span>
+<span class="sd">            not available. Has no effect when ``field_type = None``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of fields from the given OTree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">field_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">field_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">FieldType</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field_type</span><span class="si">}</span><span class="s2"> is not a FieldType.&quot;</span><span class="p">)</span>
+    <span class="n">t_fields</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">otree</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">field_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">t_fields</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">infer</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">t_fields</span>
+                <span class="k">if</span> <span class="n">otree</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">is</span> <span class="n">field_type</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">t_fields</span> <span class="k">if</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">is</span> <span class="n">field_type</span>
+            <span class="p">)</span></div>
 
 
 
@@ -281,19 +321,21 @@
 <span class="sd">            New OTree instance with updated children.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">aux_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span>
-        <span class="p">)</span>
-        <span class="n">aux_args</span> <span class="o">=</span> <span class="n">aux_names</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">aux_args</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aux_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;update of keys </span><span class="si">{</span><span class="n">aux_args</span><span class="si">}</span><span class="s1"> not allowed, use &quot;ojax.new()&quot; &#39;</span>
-                <span class="sa">f</span><span class="s2">&quot;instead to create instance of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; different PyTree structure.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;instead to create new instances of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; with updated auxiliary fields.&quot;</span>
             <span class="p">)</span>
+        <span class="n">child_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">child_names</span><span class="p">:</span>
+                <span class="k">continue</span>
             <span class="n">old_v</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">old_v</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -314,8 +356,8 @@
         <span class="n">tree_leaves</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">num_arrays</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">aux_values</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">:</span>
                 <span class="n">aux_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
                 <span class="n">num_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
@@ -347,8 +389,8 @@
         <span class="n">aux_values_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">aux_values</span><span class="p">)</span>
         <span class="n">tree_children</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">AUX</span><span class="p">:</span>
                 <span class="n">tree_children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">aux_values_iter</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FieldType</span><span class="o">.</span><span class="n">CHILD</span><span class="p">:</span>
@@ -369,10 +411,10 @@
         <span class="k">return</span> <span class="n">otree</span></div>
 
 
-<div class="viewcode-block" id="OTree.infer_field_type">
-<a class="viewcode-back" href="../../ojax.html#ojax.OTree.infer_field_type">[docs]</a>
+<div class="viewcode-block" id="OTree.__infer_otree_field_type__">
+<a class="viewcode-back" href="../../ojax.html#ojax.OTree.__infer_otree_field_type__">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">infer_field_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__infer_otree_field_type__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">Field</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldType</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Infer the OJAX field type from a :class:`dataclasses.Field` object.</span>
 
 <span class="sd">        When :class:`ojax.FieldType` is unspecified (when</span>
