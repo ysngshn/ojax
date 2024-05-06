@@ -75,10 +75,6 @@ the desiderata below:
 * Flexible custom classes for general JAX computation
 * Compatible with JAX and its functional paradigm
 
-`Simple Pytree`_ comes pretty close to this goal. However, its dataclass /
-non-dataclass initializations and ``mutable=True`` option can be confusing and
-it is not clear which should be the right choice.
-
 OJAX strives to define how a JAX base class should be. It provides a natural 
 way to structure custom JAX code and discourages users from common pitfalls.
 

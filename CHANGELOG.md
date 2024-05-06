@@ -1,5 +1,13 @@
 # Change log
 
+## ojax 2.0.1
+
+Change doc theme. Improve documentation.
+
+- Other changes
+  - Now uses the sphinx_book_theme for Sphinx documentation.
+  - Finetune documentation.
+
 ## ojax 2.0.0
 
 Rework API. Add unit tests.
