@@ -361,10 +361,11 @@ variables instead of fields :)</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Doing accurate type annotation is helpful but not required. It helps OTree to
-infer how to handle the fields as a PyTree. No need to think too hard though,
-declaring everything as <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Any</span></code></a> is also fine, and the PyTree
-handling can be specified explicitly in any case.</p>
+<p>Doing accurate type annotation is helpful but not required, since it is not
+checked by Python. This said, typing can help OTree to infer how to handle
+the fields as a PyTree. No need to think too hard though, declaring
+everything as <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Any</span></code></a> is also fine, and the PyTree handling can be
+specified explicitly in any case.</p>
 </div>
 <p>In the last pattern, <a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
 <a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also
@@ -473,8 +474,8 @@ numerical data for the children fields. The following code segment from the
 </div>
 <p><a class="reference internal" href="ojax.html#ojax.OTree.update" title="ojax.OTree.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.OTree.update()</span></code></a> preserves the PyTree structure and disallows updating
 auxiliary fields. This is usually the intended behavior since JAX operations
-don’t alter the PyTree structure either. It is also a requirement for JAX
-functions such as <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.scan.html#jax.lax.scan" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.lax.scan</span></code></a>.</p>
+don’t alter the PyTree structure either. It is also required for some arguments
+in JAX functions such as <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.scan.html#jax.lax.scan" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.lax.scan</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">None</span></code> is a special empty PyTree container. Thus updating numerical fields

@@ -43,10 +43,11 @@ Annotated fields can have the following patterns:
 
 .. note::
 
-  Doing accurate type annotation is helpful but not required. It helps OTree to
-  infer how to handle the fields as a PyTree. No need to think too hard though,
-  declaring everything as :obj:`typing.Any` is also fine, and the PyTree
-  handling can be specified explicitly in any case.
+  Doing accurate type annotation is helpful but not required, since it is not
+  checked by Python. This said, typing can help OTree to infer how to handle
+  the fields as a PyTree. No need to think too hard though, declaring
+  everything as :obj:`typing.Any` is also fine, and the PyTree handling can be
+  specified explicitly in any case.
 
 In the last pattern, :meth:`ojax.child` / :meth:`ojax.aux` /
 :meth:`ojax.ignore` are variants of :obj:`dataclasses.field` that also
