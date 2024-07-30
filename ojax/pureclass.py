@@ -1,7 +1,5 @@
 """Customized frozen dataclass for immutable computation."""
-
 from typing import TypeVar, dataclass_transform
-import inspect
 import warnings
 import copy
 from dataclasses import dataclass, fields
@@ -21,21 +19,23 @@ def _is_magic_name(s: str) -> bool:
 # get non magical and non callable class variables
 def _get_class_vars(cls: type) -> list[str]:
     return [
-        n for m in inspect.getmembers(cls)
-        if not callable(getattr(cls, n := m[0])) and not _is_magic_name(n)
+        m for m in cls.__dict__
+        if not callable(getattr(cls, m)) and not _is_magic_name(m)
     ]
 
 
 # warn user about non-annotated class variables ambiguous for dataclasses
 def _warn_no_anno_class_attrs(cls: type) -> None:
-    anno = inspect.get_annotations(cls)
+    anno = cls.__annotations__
     no_annos = tuple(n for n in _get_class_vars(cls) if n not in anno)
     if not no_annos:
         return
     warnings.warn(
-        f'Non-annotated class attributes are ignored by dataclass: {no_annos}.'
-        f' Consider adding annotations and declaring class variables '
-        f'explicitly with typing.ClassVar instead.', NoAnnotationWarning)
+        f'Non-annotated class attributes are ignored by dataclass '
+        f'{cls.__name__}: {no_annos}. Consider adding annotations and '
+        f'declaring class variables explicitly with typing.ClassVar instead.',
+        NoAnnotationWarning,
+    )
 
 
 @dataclass_transform(frozen_default=True)
