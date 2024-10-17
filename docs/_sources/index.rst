@@ -16,6 +16,7 @@ Welcome to OJAX's documentation!
   quickstart
   example
   modules
+  changelog-link
 
 Indices and tables
 ==================

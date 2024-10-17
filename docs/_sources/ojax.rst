@@ -11,6 +11,8 @@ ojax package
     aux,
     child,
     fields,
-    FieldType,
-    get_field_type
+    OTreeField,
+    Aux,
+    Child,
+    Ignore
   :undoc-members:

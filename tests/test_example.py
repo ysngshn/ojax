@@ -2,7 +2,7 @@ from dataclasses import field
 import jax
 import jax.numpy as jnp
 from jax.random import PRNGKey, split as jrsplit, normal as jrnormal
-from ojax import aux, child, OTree, get_field_type, fields
+from ojax import aux, child, OTree, fields
 
 
 # defines a fully connected layer for neural networks
@@ -43,11 +43,11 @@ if __name__ == "__main__":
     # No inplace update, need to get the returned updated layer instance!
     layer = layer.update_parameters(weight=init_weight, bias=init_bias)
     for f in fields(layer):
-        print(f.name, get_field_type(f), OTree.__infer_otree_field_type__(f))
-        # input_features None aux
-        # output_features aux aux
-        # weight None child
-        # bias child child
+        print(f.name, type(f), OTree.__infer_otree_field_type__(f))
+        # input_features <class 'dataclasses.Field'> <class 'ojax.otree.Aux'>
+        # output_features <class 'ojax.otree.Aux'> <class 'ojax.otree.Aux'>
+        # weight <class 'dataclasses.Field'> <class 'ojax.otree.Child'>
+        # bias <class 'ojax.otree.Child'> <class 'ojax.otree.Child'>
     # use layer as a pytree
     layer_w, layer_b = jax.tree.flatten(layer)[0]
     assert (layer_w == init_weight).all() and (layer_b == init_bias).all()

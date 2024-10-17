@@ -1,12 +1,14 @@
 from . import otree, pureclass
 from .otree import (
-    OTree,
-    ignore,
+    OTreeField,
+    Aux,
+    Child,
+    Ignore,
+    fields,
     aux,
     child,
-    FieldType,
-    fields,
-    get_field_type,
+    ignore,
+    OTree,
 )
 from .pureclass import (
     new,
@@ -15,5 +17,4 @@ from .pureclass import (
 )
 
 
-__version__ = "2.0.2"
-
+__version__ = "3.0.0"

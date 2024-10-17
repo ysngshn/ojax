@@ -155,6 +155,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ojax.html">ojax package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog-link.html">Change log</a></li>
 </ul>
 
     </div>
@@ -401,7 +402,7 @@ states are always returned instead.</p></li>
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax.random</span> <span class="kn">import</span> <span class="n">PRNGKey</span><span class="p">,</span> <span class="n">split</span> <span class="k">as</span> <span class="n">jrsplit</span><span class="p">,</span> <span class="n">normal</span> <span class="k">as</span> <span class="n">jrnormal</span>
-<span class="kn">from</span> <span class="nn">ojax</span> <span class="kn">import</span> <span class="n">aux</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">OTree</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">,</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">ojax</span> <span class="kn">import</span> <span class="n">aux</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">OTree</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="c1"># defines a fully connected layer for neural networks</span>
@@ -442,11 +443,11 @@ states are always returned instead.</p></li>
 <span class="hll">    <span class="c1"># No inplace update, need to get the returned updated layer instance!</span>
 </span><span class="hll">    <span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">init_weight</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">init_bias</span><span class="p">)</span>
 </span>    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">get_field_type</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">OTree</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
-        <span class="c1"># input_features None aux</span>
-        <span class="c1"># output_features aux aux</span>
-        <span class="c1"># weight None child</span>
-        <span class="c1"># bias child child</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">OTree</span><span class="o">.</span><span class="n">__infer_otree_field_type__</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="c1"># input_features &lt;class &#39;dataclasses.Field&#39;&gt; &lt;class &#39;ojax.otree.Aux&#39;&gt;</span>
+        <span class="c1"># output_features &lt;class &#39;ojax.otree.Aux&#39;&gt; &lt;class &#39;ojax.otree.Aux&#39;&gt;</span>
+        <span class="c1"># weight &lt;class &#39;dataclasses.Field&#39;&gt; &lt;class &#39;ojax.otree.Child&#39;&gt;</span>
+        <span class="c1"># bias &lt;class &#39;ojax.otree.Child&#39;&gt; &lt;class &#39;ojax.otree.Child&#39;&gt;</span>
     <span class="c1"># use layer as a pytree</span>
     <span class="n">layer_w</span><span class="p">,</span> <span class="n">layer_b</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">layer</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">assert</span> <span class="p">(</span><span class="n">layer_w</span> <span class="o">==</span> <span class="n">init_weight</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">layer_b</span> <span class="o">==</span> <span class="n">init_bias</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>

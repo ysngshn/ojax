@@ -4,7 +4,7 @@ Installing OJAX
 Dependencies
 ------------
 
-OJAX is written in pure Python and requires Python 3.9+ (same as JAX).
+OJAX is written in pure Python and requires Python 3.10+ (same as JAX).
 
 It only depends on JAX, which can be installed following the
 `JAX official installation guide`_.

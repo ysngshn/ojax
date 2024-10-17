@@ -155,6 +155,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ojax.html">ojax package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog-link.html">Change log</a></li>
 </ul>
 
     </div>
@@ -438,18 +439,18 @@ and become class variables instead of dataclass fields. OTree raises a
 warning for you in this case so don’t worry about accidentally making class
 variables instead of fields :)</p>
 <p>If you want to create a class variable, declare it explicitly with
-<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.ClassVar</span></code></a> so you won’t be nagged by this warning.</p>
+<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.ClassVar</span></code></a> so you won’t be nagged by this warning.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Doing accurate type annotation is helpful but not required, since it is not
 checked by Python. This said, typing can help OTree to infer how to handle
 the fields as a PyTree. No need to think too hard though, declaring
-everything as <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Any</span></code></a> is also fine, and the PyTree handling can be
+everything as <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typing.Any</span></code></a> is also fine, and the PyTree handling can be
 specified explicitly in any case.</p>
 </div>
 <p>In the last pattern, <a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
-<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also
+<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also
 specifies how an OTree should handle a field as a PyTree. Let’s discuss this
 point further.</p>
 </section>
@@ -530,7 +531,7 @@ immutable dataclass).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>As a dataclass, it is also possible to use the
-<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.__post_init__" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.__post_init__</span></code></a> method and <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#init-only-variables">InitVar</a> to customize the
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.__post_init__" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.__post_init__</span></code></a> method and <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#init-only-variables">InitVar</a> to customize the
 initialization process of OTrees. However, this requires more expertise with
 the Python dataclass structure and can be less intuitive than a custom
 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method for many Python users. Moreover, inheriting from a bass
@@ -567,7 +568,7 @@ error from the <code class="docutils literal notranslate"><span class="pre">.upd
 PyTree structure, the <a class="reference internal" href="ojax.html#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a> method should be used instead.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Again, Python dataclass offers the <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.replace" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.replace</span></code></a> method for
+<p>Again, Python dataclass offers the <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.replace" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.replace</span></code></a> method for
 updating dataclasses fields. However, it also does not preserve the PyTree
 structure, similar to <a class="reference internal" href="ojax.html#ojax.new" title="ojax.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.new()</span></code></a>. Furthermore, it relies on re-calling
 the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method to generate the new instance and can be problematic

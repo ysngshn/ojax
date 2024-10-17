@@ -1,49 +1,51 @@
 from typing import (
     TypeVar,
-    Optional,
-    Union,
     Sequence,
+    Union,
 )
-import enum
-import dataclasses
+import abc
+from dataclasses import Field, MISSING, fields as dc_fields
 import jax
 from . import pureclass
 
 
-@enum.unique
-class FieldType(enum.StrEnum):
-    """Choices for OTree field types."""
-    
-    AUX = "aux"
-    CHILD = "child"
-    IGNORE = "ignore"
+class OTreeField(Field, metaclass=abc.ABCMeta):
+    """Abstract dataclasses.Field subclass for OTree fields."""
+    def __init__(self, *, default=MISSING, default_factory=MISSING, **kwargs):
+        if default is not MISSING and default_factory is not MISSING:
+            raise ValueError('cannot specify both default and default_factory')
+        super().__init__(
+            default=default, default_factory=default_factory, **kwargs
+        )
 
 
-def get_field_type(f: dataclasses.Field) -> Optional[FieldType]:
-    """Retrieve the OJAX field type from a ``dataclasses.Field`` object.
+class Aux(OTreeField):
+    """Field subclass for OTree auxiliary data that belong to ``PyTreeDef``."""
+    pass
 
-    Args:
-        f: a field of ``ojax.OTree``.
 
-    Returns:
-        The ``ojax.FieldType`` if available, and ``None`` otherwise.
-    """
+class Child(OTreeField):
+    """Field subclass for a child PyTree node."""
+    pass
 
-    return f.metadata.get("ojax-field-type")
+
+class Ignore(OTreeField):
+    """Field subclass that is ignored by PyTree creation"""
+    pass
 
 
 def fields(
-        otree: Union["OTree", "type(OTree)"],
-        field_type: Optional[FieldType] = None,
+        otree: Union["OTree", "type[OTree]"],
+        field_type: type[OTreeField] = None,
         infer: bool = True,
-) -> tuple[dataclasses.Field, ...]:
-    """Convenience function extending dataclasses.fields() that can filter
+) -> tuple[Field, ...]:
+    """Convenience function extending ``dataclasses.fields`` that can filter
     fields by OTree field type.
 
     Args:
         otree: the OTree instance to examine.
         field_type: if not None, specifies the field type to filter the list of
-            fields from OTree.
+            fields from the OTree.
         infer: determines if the field type should be inferred in case it is
             not available. Has no effect when ``field_type = None``.
 
@@ -51,113 +53,113 @@ def fields(
         A tuple of fields from the given OTree.
     """
 
-    if field_type is not None and field_type not in FieldType:
-        raise ValueError(f"{field_type} is not a FieldType.")
-    t_fields = dataclasses.fields(otree)
+    if field_type is not None and not issubclass(field_type, OTreeField):
+        raise ValueError(f"{field_type} is not a OTreeField subclass.")
+    t_fields = dc_fields(otree)
     if field_type is None:
         return t_fields
     else:
         if infer:
             return tuple(
                 f for f in t_fields
-                if otree.__infer_otree_field_type__(f) is field_type
+                if issubclass(otree.__infer_otree_field_type__(f), field_type)
             )
         else:
-            return tuple(
-                f for f in t_fields if get_field_type(f) is field_type
-            )
+            return tuple(f for f in t_fields if isinstance(f, field_type))
 
 
 def aux(
     *,
-    default=dataclasses.MISSING,
-    default_factory=dataclasses.MISSING,
+    default=MISSING,
+    default_factory=MISSING,
     init=True,
     repr=True,
     hash=None,
     compare=True,
     metadata=None,
-) -> dataclasses.Field:
+    kw_only=MISSING,
+    **kwargs
+) -> Aux:
     """Declares an OTree field that holds auxiliary data as part of
-    ``PyTreeDef``.
+    `PyTreeDef`.
 
-    This function has identical arguments and return as the
-    :obj:`dataclasses.field` function.
+    This function has identical arguments to :obj:`dataclasses.field` and
+    returns a field of type :class:`ojax.Aux`.
     """
 
-    metadata = {} if metadata is None else metadata
-    metadata = {"ojax-field-type": FieldType.AUX, **metadata}
-    kwargs = {
-        "default": default,
-        "default_factory": default_factory,
-        "init": init,
-        "repr": repr,
-        "hash": hash,
-        "compare": compare,
-        "metadata": metadata,
-    }
-    return dataclasses.field(**kwargs)
+    return Aux(
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
+        kw_only=kw_only,
+        **kwargs
+    )
 
 
-# OTree field which holds a child PyTree node
 def child(
     *,
-    default=dataclasses.MISSING,
-    default_factory=dataclasses.MISSING,
+    default=MISSING,
+    default_factory=MISSING,
     init=True,
     repr=True,
     hash=None,
     compare=True,
     metadata=None,
-):
+    kw_only=MISSING,
+    **kwargs
+) -> Child:
     """Declares an OTree field that holds a child PyTree node.
 
-    This function has identical arguments and return as the
-    :obj:`dataclasses.field` function.
+    This function has identical arguments to :obj:`dataclasses.field` and
+    returns a field of type :class:`ojax.Child`.
     """
 
-    metadata = {} if metadata is None else metadata
-    metadata = {"ojax-field-type": FieldType.CHILD, **metadata}
-    kwargs = {
-        "default": default,
-        "default_factory": default_factory,
-        "init": init,
-        "repr": repr,
-        "hash": hash,
-        "compare": compare,
-        "metadata": metadata,
-    }
-    return dataclasses.field(**kwargs)
+    return Child(
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
+        kw_only=kw_only,
+        **kwargs
+    )
 
 
 def ignore(
     *,
-    default=dataclasses.MISSING,
-    default_factory=dataclasses.MISSING,
+    default=MISSING,
+    default_factory=MISSING,
     init=True,
     repr=True,
     hash=None,
     compare=True,
     metadata=None,
-) -> dataclasses.Field:
+    kw_only=MISSING,
+    **kwargs
+) -> Ignore:
     """Declares an OTree field that is ignored by PyTree creation.
 
-    This function has identical arguments and return as the
-    :obj:`dataclasses.field` function.
+    This function has identical arguments to :obj:`dataclasses.field` and
+    returns a field of type :class:`ojax.Ignore`.
     """
 
-    metadata = {} if metadata is None else metadata
-    metadata = {"ojax-field-type": FieldType.IGNORE, **metadata}
-    kwargs = {
-        "default": default,
-        "default_factory": default_factory,
-        "init": init,
-        "repr": repr,
-        "hash": hash,
-        "compare": compare,
-        "metadata": metadata,
-    }
-    return dataclasses.field(**kwargs)
+    return Ignore(
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
+        kw_only=kw_only,
+        **kwargs
+    )
 
 
 OTree_T = TypeVar("OTree_T", bound="OTree")
@@ -223,7 +225,7 @@ class OTree(pureclass.PureClass):
         """
 
         aux_args = set(
-            f.name for f in fields(self, FieldType.AUX, True)
+            f.name for f in fields(self, field_type=Aux)
         ).intersection(kwargs.keys())
         if len(aux_args) != 0:
             raise ValueError(
@@ -232,7 +234,7 @@ class OTree(pureclass.PureClass):
                 f" with updated auxiliary fields."
             )
         child_names = set(
-            f.name for f in fields(self, FieldType.CHILD, True)
+            f.name for f in fields(self, field_type=Child)
         )
         for k, v in kwargs.items():
             if k not in child_names:
@@ -256,16 +258,16 @@ class OTree(pureclass.PureClass):
         aux_values = []
         for f in fields(self):
             name, ftype = f.name, self.__infer_otree_field_type__(f)
-            if ftype is FieldType.AUX:
+            if issubclass(ftype, Aux):
                 aux_values.append(getattr(self, name))
                 num_arrays.append((name, 0))
-            elif ftype is FieldType.CHILD:
+            elif issubclass(ftype, Child):
                 entry = getattr(self, name)
                 entry_leaves, entry_aux = jax.tree.flatten(entry)
                 tree_leaves.extend(entry_leaves)
                 aux_values.append(entry_aux)
                 num_arrays.append((name, len(entry_leaves)))
-            elif ftype is FieldType.IGNORE:
+            elif issubclass(ftype, Ignore):
                 pass
             else:
                 raise NotImplementedError
@@ -286,17 +288,17 @@ class OTree(pureclass.PureClass):
         offset = 0
         for f in fields(cls):
             name, ftype = f.name, cls.__infer_otree_field_type__(f)
-            if ftype is FieldType.AUX:
+            if issubclass(ftype, Aux):
                 tree_children[name] = next(aux_values_iter)
-            elif ftype is FieldType.CHILD:
+            elif issubclass(ftype, Child):
                 count = num_arrays[name]
-                child_leaves = children[offset : offset + count]
+                child_leaves = children[offset: offset + count]
                 tree_child = jax.tree.unflatten(
                     next(aux_values_iter), child_leaves
                 )
                 tree_children[name] = tree_child
                 offset += count
-            elif ftype is FieldType.IGNORE:
+            elif issubclass(ftype, Ignore):
                 pass
             else:
                 raise NotImplementedError
@@ -306,30 +308,33 @@ class OTree(pureclass.PureClass):
         return otree
 
     @classmethod
-    def __infer_otree_field_type__(cls, f: dataclasses.Field) -> FieldType:
+    def __infer_otree_field_type__(cls, f: Field) -> type[OTreeField]:
         """Infer the OJAX field type from a :class:`dataclasses.Field` object.
 
-        When :class:`ojax.FieldType` is unspecified (when
-        :py:meth:`get_field_type` returns ``None``), the annotated ``f.type``
-        is used for inference: for subclasses of :class:`jax.Array` and
-        :class:`ojax.OTree` are assumed to be child fields and the rest are
-        assumed to be auxiliary fields. You can override this method through
-        subclass inheritance to change the inference logic.
+        When `f` does not have specified OTree field type (not an instance of
+        :class:`ojax.OTreeField`), the annotated ``f.type`` is used for
+        inference: for subclasses of :class:`jax.Array` and :class:`ojax.OTree`
+        are assumed to be child fields and the rest are assumed to be auxiliary
+        fields. You can override this method through subclass inheritance to
+        change the inference logic.
 
         Args:
             f: a field of :class:`OTree`.
 
         Returns:
-            The inferred :class:`ojax.FieldType`.
+            The inferred :class:`ojax.OTreeField`.
         """
 
         try:
-            f_type = get_field_type(f)
-            if f_type is not None:
-                return f_type
+            if isinstance(f, Aux):
+                return Aux
+            elif isinstance(f, Child):
+                return Child
+            elif isinstance(f, Ignore):
+                return Ignore
             elif issubclass(f.type, (OTree, jax.Array)):
-                return FieldType.CHILD
+                return Child
             else:
-                return FieldType.AUX
+                return Aux
         except TypeError:  # issubclass fails if f.type is not a proper class
-            return FieldType.AUX
+            return Aux

@@ -22,13 +22,13 @@ class TestOTree(unittest.TestCase):
             e: dataclasses.InitVar[str]
 
         ftmap = {
-            'a': ojax.FieldType.AUX,
-            'b': ojax.FieldType.CHILD,
-            'c': ojax.FieldType.IGNORE,
+            'a': ojax.Aux,
+            'b': ojax.Child,
+            'c': ojax.Ignore,
         }
-        self.assertEqual(len(tuple(ojax.fields(MyOTree))), 3)
-        for f in ojax.fields(MyOTree):
-            self.assertEqual(ojax.get_field_type(f), ftmap[f.name])
+        self.assertEqual(len(tuple(dataclasses.fields(MyOTree))), 3)
+        for f in dataclasses.fields(MyOTree):
+            self.assertTrue(isinstance(f, ftmap[f.name]))
 
     def test_aux_infer(self):
         class MyOTree(ojax.OTree):
@@ -38,9 +38,9 @@ class TestOTree(unittest.TestCase):
             d: "typing.Any" = dataclasses.field(default=42)
             e: tuple[jax.Array] = dataclasses.field(default_factory=tuple)
 
-        for f in ojax.fields(MyOTree):
+        for f in dataclasses.fields(MyOTree):
             self.assertEqual(
-                ojax.OTree.__infer_otree_field_type__(f), ojax.FieldType.AUX
+                ojax.OTree.__infer_otree_field_type__(f), ojax.Aux
             )
 
     def test_child_infer(self):
@@ -49,9 +49,9 @@ class TestOTree(unittest.TestCase):
             b: jax.numpy.ndarray
             c: ojax.OTree
 
-        for f in ojax.fields(MyOTree2):
+        for f in dataclasses.fields(MyOTree2):
             self.assertEqual(
-                ojax.OTree.__infer_otree_field_type__(f), ojax.FieldType.CHILD
+                ojax.OTree.__infer_otree_field_type__(f), ojax.Child
             )
 
     def test_init(self):
@@ -80,6 +80,7 @@ class TestOTree(unittest.TestCase):
 
             def __post_init__(self, e) -> None:
                 assert e == 'lol'
+                super().__post_init__()
 
         my_otree = MyOTree(a=0, b=4.2, c=None, e='lol')
 
