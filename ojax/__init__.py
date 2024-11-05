@@ -4,10 +4,13 @@ from .otree import (
     Aux,
     Child,
     Ignore,
+    Alien,
     fields,
     aux,
     child,
     ignore,
+    alien,
+    AlienException,
     OTree,
 )
 from .pureclass import (
@@ -17,4 +20,4 @@ from .pureclass import (
 )
 
 
-__version__ = "3.0.0"
+__version__ = "3.1.0"

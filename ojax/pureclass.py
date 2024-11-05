@@ -4,7 +4,6 @@ import warnings
 import copy
 from dataclasses import dataclass, fields
 
-
 PureClass_T = TypeVar("PureClass_T", bound="PureClass")
 
 
@@ -16,11 +15,15 @@ def _is_magic_name(s: str) -> bool:
     return s.startswith('__') and s.endswith('__')
 
 
-# get non magical and non callable class variables
+# get non property, non magical and non callable class variables
 def _get_class_vars(cls: type) -> list[str]:
     return [
-        m for m in cls.__dict__
-        if not callable(getattr(cls, m)) and not _is_magic_name(m)
+        m for m, v in cls.__dict__.items()
+        if not (
+            callable(getattr(cls, m))
+            or _is_magic_name(m)
+            or isinstance(v, property)
+        )
     ]
 
 
@@ -59,7 +62,7 @@ class PureClass:
         _warn_no_anno_class_attrs(cls)
         return dataclass(frozen=True, **kwargs)(cls)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self, *args, **kwargs) -> None:
         """Empty __post_init__() for multiple inheritance support."""
 
         pass

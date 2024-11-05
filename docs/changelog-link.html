@@ -384,6 +384,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-3-1-0">ojax 3.1.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-3-0-0">ojax 3.0.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-2-0-2">ojax 2.0.2</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-2-0-1">ojax 2.0.1</a></li>
@@ -402,6 +403,29 @@ document.write(`
                   
   <section id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Link to this heading">#</a></h1>
+<section id="ojax-3-1-0">
+<h2>ojax 3.1.0<a class="headerlink" href="#ojax-3-1-0" title="Link to this heading">#</a></h2>
+<p>Add new <code class="docutils literal notranslate"><span class="pre">Alien</span></code> field type to denote “incompatible” fields that should crash
+PyTree flatten / unflatten operations:</p>
+<ul class="simple">
+<li><p>New features:</p>
+<ul>
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">ojax.Alien</span></code> Field class.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">ojax.alien</span></code> for alien field type declaration.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">ojax.AlienException</span></code> which will be raised when flattening /
+unflattening PyTrees with alien fields.</p></li>
+</ul>
+</li>
+<li><p>Other changes:</p>
+<ul>
+<li><p>fixed wrong <code class="docutils literal notranslate"><span class="pre">NoAnnotationWarning</span></code> warnings when a <code class="docutils literal notranslate"><span class="pre">property</span></code> is defined in
+<code class="docutils literal notranslate"><span class="pre">ojax.OTree</span></code>.</p></li>
+<li><p>Updated the documentation to include the new alien field type.</p></li>
+<li><p>Added test coverage analysis and improved unit tests</p></li>
+</ul>
+</li>
+</ul>
+</section>
 <section id="ojax-3-0-0">
 <h2>ojax 3.0.0<a class="headerlink" href="#ojax-3-0-0" title="Link to this heading">#</a></h2>
 <p>Rework <code class="docutils literal notranslate"><span class="pre">ojax.OTree</span></code> field type representation.</p>
@@ -409,7 +433,7 @@ document.write(`
 <code class="docutils literal notranslate"><span class="pre">dataclasses.Field</span></code> instead of setting custom metadata. This simplifies field
 type checking and allows for further subclassing. Specifically:</p>
 <ul class="simple">
-<li><p>classes <code class="docutils literal notranslate"><span class="pre">Aux</span></code>, <code class="docutils literal notranslate"><span class="pre">Child</span></code>, <code class="docutils literal notranslate"><span class="pre">Ignore</span></code> are added which indicates the type of
+<li><p>Classes <code class="docutils literal notranslate"><span class="pre">Aux</span></code>, <code class="docutils literal notranslate"><span class="pre">Child</span></code>, <code class="docutils literal notranslate"><span class="pre">Ignore</span></code> are added which indicates the type of
 <code class="docutils literal notranslate"><span class="pre">OTree</span></code> field. They all inherit from the abstract base class <code class="docutils literal notranslate"><span class="pre">OTreeField</span></code>
 which is itself a subclass of <code class="docutils literal notranslate"><span class="pre">dataclasses.Field</span></code>.</p></li>
 <li><p>The function <code class="docutils literal notranslate"><span class="pre">ojax.get_field_type</span></code> and the enum class <code class="docutils literal notranslate"><span class="pre">ojax.FieldType</span></code> is
@@ -502,6 +526,7 @@ also return fields of a certain field type.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-3-1-0">ojax 3.1.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-3-0-0">ojax 3.0.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-2-0-2">ojax 2.0.2</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax-2-0-1">ojax 2.0.1</a></li>

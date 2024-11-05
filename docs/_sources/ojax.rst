@@ -7,12 +7,15 @@ ojax package
     new,
     PureClass,
     OTree,
-    ignore,
     aux,
     child,
+    ignore,
+    alien,
     fields,
     OTreeField,
     Aux,
     Child,
-    Ignore
+    Ignore,
+    Alien,
+    AlienException
   :undoc-members:

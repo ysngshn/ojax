@@ -11,12 +11,7 @@ from . import pureclass
 
 class OTreeField(Field, metaclass=abc.ABCMeta):
     """Abstract dataclasses.Field subclass for OTree fields."""
-    def __init__(self, *, default=MISSING, default_factory=MISSING, **kwargs):
-        if default is not MISSING and default_factory is not MISSING:
-            raise ValueError('cannot specify both default and default_factory')
-        super().__init__(
-            default=default, default_factory=default_factory, **kwargs
-        )
+    pass
 
 
 class Aux(OTreeField):
@@ -31,6 +26,11 @@ class Child(OTreeField):
 
 class Ignore(OTreeField):
     """Field subclass that is ignored by PyTree creation"""
+    pass
+
+
+class Alien(OTreeField):
+    """Field subclass that is incompatible with PyTree flatten/unflatten"""
     pass
 
 
@@ -162,6 +162,42 @@ def ignore(
     )
 
 
+def alien(
+    *,
+    default=MISSING,
+    default_factory=MISSING,
+    init=True,
+    repr=True,
+    hash=None,
+    compare=True,
+    metadata=None,
+    kw_only=MISSING,
+    **kwargs
+) -> Alien:
+    """Declares an OTree field that is not part of PyTree and crashes the
+    flatten / unflatten operations.
+
+    This function has identical arguments to :obj:`dataclasses.field` and
+    returns a field of type :class:`ojax.Alien`.
+    """
+
+    return Alien(
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
+        kw_only=kw_only,
+        **kwargs
+    )
+
+
+class AlienException(Exception):
+    pass
+
+
 OTree_T = TypeVar("OTree_T", bound="OTree")
 
 
@@ -267,9 +303,11 @@ class OTree(pureclass.PureClass):
                 tree_leaves.extend(entry_leaves)
                 aux_values.append(entry_aux)
                 num_arrays.append((name, len(entry_leaves)))
+            elif issubclass(ftype, Alien):
+                raise AlienException(f'Cannot flatten alien field {name}.')
             elif issubclass(ftype, Ignore):
                 pass
-            else:
+            else:  # pragma: no cover
                 raise NotImplementedError
         return tuple(tree_leaves), (tuple(num_arrays), tuple(aux_values))
 
@@ -298,9 +336,11 @@ class OTree(pureclass.PureClass):
                 )
                 tree_children[name] = tree_child
                 offset += count
+            elif issubclass(ftype, Alien):  # pragma: no cover
+                raise AlienException(f'Cannot unflatten alien field {name}.')
             elif issubclass(ftype, Ignore):
                 pass
-            else:
+            else:  # pragma: no cover
                 raise NotImplementedError
         # alternative to cls.__init__ since it might be custom
         otree = cls.__new__(cls)
@@ -332,6 +372,8 @@ class OTree(pureclass.PureClass):
                 return Child
             elif isinstance(f, Ignore):
                 return Ignore
+            elif isinstance(f, Alien):
+                return Alien
             elif issubclass(f.type, (OTree, jax.Array)):
                 return Child
             else:

@@ -28,7 +28,8 @@ Annotated fields can have the following patterns:
 * ``field_name: type = dataclasses.field()`` with optional `dataclasses.field`_
   arguments such as ``default`` / ``default_factory`` and ``init``
 * ``field_name: type =``:meth:`ojax.child` / :meth:`ojax.aux` /
-  :meth:`ojax.ignore` with the same optional arguments as `dataclasses.field`_
+  :meth:`ojax.ignore` /
+  :meth:`ojax.alien` with the same optional arguments as `dataclasses.field`_
 
 .. note::
 
@@ -50,9 +51,9 @@ Annotated fields can have the following patterns:
   specified explicitly in any case.
 
 In the last pattern, :meth:`ojax.child` / :meth:`ojax.aux` /
-:meth:`ojax.ignore` are variants of :obj:`dataclasses.field` that also
-specifies how an OTree should handle a field as a PyTree. Let's discuss this
-point further.
+:meth:`ojax.ignore` / :meth:`ojax.ignore` are variants of
+:obj:`dataclasses.field` that also specifies how an OTree should handle a field
+as a PyTree. Let's discuss this point further.
 
 Field types for OTree
 ---------------------
@@ -61,7 +62,7 @@ Field types for OTree
 is composed of a definition part and a content part, and JAX operations act on
 the content part. OTree is registered as a PyTree, and thus should decide on
 how to handle its data fields. For this, fields in OTree are partitioned into
-three field types:
+four field types:
 
 * Auxiliary fields
     These are the fields that will be part of the PyTree definition. They are
@@ -72,15 +73,20 @@ three field types:
     operations. They are typically JAX arrays and sub-PyTrees and can be marked
     explicitly with :meth:`ojax.child`.
 * Ignored fields
-    These are dataclass fields that are not part of the PyTree. They are
+    These are dataclass fields that are omitted by the PyTree. They are
     declared with :meth:`ojax.ignore`.
+* Alien fields *(since 3.1.0)*
+    These are dataclass fields that are incompatible with PyTree
+    flattening / unflattening, raising :class:`ojax.AlienException` when such
+    operations are attempted. They are declared with :meth:`ojax.alien`.
 
 .. warning::
 
-  Ignore fields are not preserved after the :obj:`jax.tree.flatten` then
+  Ignored fields are not preserved after the :obj:`jax.tree.flatten` then
   :obj:`jax.tree.unflatten` transformations. Since this combo is used by common
-  JAX operations to handle PyTrees, ignore fields will easily get lost. Users
-  should stick with auxiliary and children fields by default.
+  JAX operations to handle PyTrees, ignored fields will easily get lost. Users
+  should stick with auxiliary and children fields by default, or use alien
+  fields to declare incompatible fields.
 
 For fields without explicit field type declaration, OTree infers the field type
 based on the field annotation: subclasses of :class:`jax.Array` and

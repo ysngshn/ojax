@@ -320,12 +320,7 @@ document.write(`
 <a class="viewcode-back" href="../../ojax.html#ojax.OTreeField">[docs]</a>
 <span class="k">class</span> <span class="nc">OTreeField</span><span class="p">(</span><span class="n">Field</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract dataclasses.Field subclass for OTree fields.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">MISSING</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="n">MISSING</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">MISSING</span> <span class="ow">and</span> <span class="n">default_factory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">MISSING</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;cannot specify both default and default_factory&#39;</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
+    <span class="k">pass</span></div>
 
 
 
@@ -349,6 +344,14 @@ document.write(`
 <a class="viewcode-back" href="../../ojax.html#ojax.Ignore">[docs]</a>
 <span class="k">class</span> <span class="nc">Ignore</span><span class="p">(</span><span class="n">OTreeField</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Field subclass that is ignored by PyTree creation&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Alien">
+<a class="viewcode-back" href="../../ojax.html#ojax.Alien">[docs]</a>
+<span class="k">class</span> <span class="nc">Alien</span><span class="p">(</span><span class="n">OTreeField</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Field subclass that is incompatible with PyTree flatten/unflatten&quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
 
@@ -493,6 +496,48 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="alien">
+<a class="viewcode-back" href="../../ojax.html#ojax.alien">[docs]</a>
+<span class="k">def</span> <span class="nf">alien</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">default_factory</span><span class="o">=</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="n">init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">compare</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">kw_only</span><span class="o">=</span><span class="n">MISSING</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alien</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Declares an OTree field that is not part of PyTree and crashes the</span>
+<span class="sd">    flatten / unflatten operations.</span>
+
+<span class="sd">    This function has identical arguments to :obj:`dataclasses.field` and</span>
+<span class="sd">    returns a field of type :class:`ojax.Alien`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">Alien</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span>
+        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+        <span class="nb">repr</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span>
+        <span class="nb">hash</span><span class="o">=</span><span class="nb">hash</span><span class="p">,</span>
+        <span class="n">compare</span><span class="o">=</span><span class="n">compare</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+        <span class="n">kw_only</span><span class="o">=</span><span class="n">kw_only</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="AlienException">
+<a class="viewcode-back" href="../../ojax.html#ojax.AlienException">[docs]</a>
+<span class="k">class</span> <span class="nc">AlienException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
 <span class="n">OTree_T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;OTree_T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;OTree&quot;</span><span class="p">)</span>
 
 
@@ -605,9 +650,11 @@ document.write(`
                 <span class="n">tree_leaves</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entry_leaves</span><span class="p">)</span>
                 <span class="n">aux_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry_aux</span><span class="p">)</span>
                 <span class="n">num_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry_leaves</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">ftype</span><span class="p">,</span> <span class="n">Alien</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">AlienException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot flatten alien field </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">ftype</span><span class="p">,</span> <span class="n">Ignore</span><span class="p">):</span>
                 <span class="k">pass</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span>
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tree_leaves</span><span class="p">),</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">num_arrays</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">aux_values</span><span class="p">))</span></div>
 
@@ -639,9 +686,11 @@ document.write(`
                 <span class="p">)</span>
                 <span class="n">tree_children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree_child</span>
                 <span class="n">offset</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">ftype</span><span class="p">,</span> <span class="n">Alien</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+                <span class="k">raise</span> <span class="n">AlienException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot unflatten alien field </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">ftype</span><span class="p">,</span> <span class="n">Ignore</span><span class="p">):</span>
                 <span class="k">pass</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span>
         <span class="c1"># alternative to cls.__init__ since it might be custom</span>
         <span class="n">otree</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
@@ -676,6 +725,8 @@ document.write(`
                 <span class="k">return</span> <span class="n">Child</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Ignore</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">Ignore</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Alien</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Alien</span>
             <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="p">(</span><span class="n">OTree</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)):</span>
                 <span class="k">return</span> <span class="n">Child</span>
             <span class="k">else</span><span class="p">:</span>

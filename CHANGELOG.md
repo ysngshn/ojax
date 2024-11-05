@@ -1,3 +1,21 @@
+# Change log
+
+## ojax 3.1.0
+
+Add new `Alien` field type to denote "incompatible" fields that should crash 
+PyTree flatten / unflatten operations:
+
+- New features:
+  - Added the `ojax.Alien` Field class.
+  - Added `ojax.alien` for alien field type declaration.
+  - Added `ojax.AlienException` which will be raised when flattening / 
+  unflattening PyTrees with alien fields.
+- Other changes:
+  - fixed wrong `NoAnnotationWarning` warnings when a `property` is defined in 
+  `ojax.OTree`. 
+  - Updated the documentation to include the new alien field type.
+  - Added test coverage analysis and improved unit tests 
+
 ## ojax 3.0.0
 
 Rework `ojax.OTree` field type representation. 
@@ -6,11 +24,11 @@ Using custom subclass of
 `dataclasses.Field` instead of setting custom metadata. This simplifies field 
 type checking and allows for further subclassing. Specifically:
 
-- classes `Aux`, `Child`, `Ignore` are added which indicates the type of 
-  `OTree` field. They all inherit from the abstract base class `OTreeField` 
-  which is itself a subclass of `dataclasses.Field`.
+- Classes `Aux`, `Child`, `Ignore` are added which indicates the type of 
+`OTree` field. They all inherit from the abstract base class `OTreeField` 
+which is itself a subclass of `dataclasses.Field`.
 - The function `ojax.get_field_type` and the enum class `ojax.FieldType` is 
-  removed since they are now unnecessary.
+removed since they are now unnecessary.
 
 Note that users should still use functions `aux()`, `child()`, `ignore()` to 
 declare field types since directly using classes could generate confusion for 

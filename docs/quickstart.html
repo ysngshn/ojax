@@ -429,7 +429,8 @@ This is more in line with the functional paradigm employed by JAX.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">dataclasses.field()</span></code> with optional <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field">dataclasses.field</a>
 arguments such as <code class="docutils literal notranslate"><span class="pre">default</span></code> / <code class="docutils literal notranslate"><span class="pre">default_factory</span></code> and <code class="docutils literal notranslate"><span class="pre">init</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">type</span> <span class="pre">=</span></code><a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
-<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> with the same optional arguments as <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field">dataclasses.field</a></p></li>
+<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> /
+<a class="reference internal" href="ojax.html#ojax.alien" title="ojax.alien"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.alien()</span></code></a> with the same optional arguments as <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field">dataclasses.field</a></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -450,9 +451,9 @@ everything as <a class="reference external" href="https://docs.python.org/3/libr
 specified explicitly in any case.</p>
 </div>
 <p>In the last pattern, <a class="reference internal" href="ojax.html#ojax.child" title="ojax.child"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.child()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.aux" title="ojax.aux"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.aux()</span></code></a> /
-<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also
-specifies how an OTree should handle a field as a PyTree. Let’s discuss this
-point further.</p>
+<a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> / <a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a> are variants of
+<a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> that also specifies how an OTree should handle a field
+as a PyTree. Let’s discuss this point further.</p>
 </section>
 <section id="field-types-for-otree">
 <h2>Field types for OTree<a class="headerlink" href="#field-types-for-otree" title="Link to this heading">#</a></h2>
@@ -460,7 +461,7 @@ point further.</p>
 is composed of a definition part and a content part, and JAX operations act on
 the content part. OTree is registered as a PyTree, and thus should decide on
 how to handle its data fields. For this, fields in OTree are partitioned into
-three field types:</p>
+four field types:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Auxiliary fields</dt><dd><p>These are the fields that will be part of the PyTree definition. They are
@@ -477,18 +478,26 @@ explicitly with <a class="reference internal" href="ojax.html#ojax.child" title=
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Ignored fields</dt><dd><p>These are dataclass fields that are not part of the PyTree. They are
+<dt>Ignored fields</dt><dd><p>These are dataclass fields that are omitted by the PyTree. They are
 declared with <a class="reference internal" href="ojax.html#ojax.ignore" title="ojax.ignore"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.ignore()</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Alien fields <em>(since 3.1.0)</em></dt><dd><p>These are dataclass fields that are incompatible with PyTree
+flattening / unflattening, raising <a class="reference internal" href="ojax.html#ojax.AlienException" title="ojax.AlienException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.AlienException</span></code></a> when such
+operations are attempted. They are declared with <a class="reference internal" href="ojax.html#ojax.alien" title="ojax.alien"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ojax.alien()</span></code></a>.</p>
 </dd>
 </dl>
 </li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Ignore fields are not preserved after the <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.tree.flatten.html#jax.tree.flatten" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.tree.flatten</span></code></a> then
+<p>Ignored fields are not preserved after the <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.tree.flatten.html#jax.tree.flatten" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.tree.flatten</span></code></a> then
 <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.tree.unflatten.html#jax.tree.unflatten" title="(in JAX)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jax.tree.unflatten</span></code></a> transformations. Since this combo is used by common
-JAX operations to handle PyTrees, ignore fields will easily get lost. Users
-should stick with auxiliary and children fields by default.</p>
+JAX operations to handle PyTrees, ignored fields will easily get lost. Users
+should stick with auxiliary and children fields by default, or use alien
+fields to declare incompatible fields.</p>
 </div>
 <p>For fields without explicit field type declaration, OTree infers the field type
 based on the field annotation: subclasses of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a> and

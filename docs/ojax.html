@@ -437,10 +437,25 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Ignore.kw_only"><code class="docutils literal notranslate"><span class="pre">Ignore.kw_only</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien"><code class="docutils literal notranslate"><span class="pre">Alien</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.name"><code class="docutils literal notranslate"><span class="pre">Alien.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.type"><code class="docutils literal notranslate"><span class="pre">Alien.type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.default"><code class="docutils literal notranslate"><span class="pre">Alien.default</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.default_factory"><code class="docutils literal notranslate"><span class="pre">Alien.default_factory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.repr"><code class="docutils literal notranslate"><span class="pre">Alien.repr</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.hash"><code class="docutils literal notranslate"><span class="pre">Alien.hash</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.init"><code class="docutils literal notranslate"><span class="pre">Alien.init</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.compare"><code class="docutils literal notranslate"><span class="pre">Alien.compare</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.metadata"><code class="docutils literal notranslate"><span class="pre">Alien.metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.kw_only"><code class="docutils literal notranslate"><span class="pre">Alien.kw_only</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.fields"><code class="docutils literal notranslate"><span class="pre">fields()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.aux"><code class="docutils literal notranslate"><span class="pre">aux()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.child"><code class="docutils literal notranslate"><span class="pre">child()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.ignore"><code class="docutils literal notranslate"><span class="pre">ignore()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.alien"><code class="docutils literal notranslate"><span class="pre">alien()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.AlienException"><code class="docutils literal notranslate"><span class="pre">AlienException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree"><code class="docutils literal notranslate"><span class="pre">OTree</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree.update"><code class="docutils literal notranslate"><span class="pre">OTree.update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree.tree_flatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_flatten()</span></code></a></li>
@@ -469,7 +484,7 @@ document.write(`
 <span id="ojax-package"></span><h1>ojax package<a class="headerlink" href="#module-ojax" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.OTreeField">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">OTreeField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#OTreeField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTreeField" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">OTreeField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#OTreeField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.OTreeField" title="Link to this definition">#</a></dt>
 <dd><p>Abstract dataclasses.Field subclass for OTree fields.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ojax.OTreeField.name">
@@ -525,7 +540,7 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.Aux">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Aux" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Aux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Aux" title="Link to this definition">#</a></dt>
 <dd><p>Field subclass for OTree auxiliary data that belong to <code class="docutils literal notranslate"><span class="pre">PyTreeDef</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ojax.Aux.name">
@@ -581,7 +596,7 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.Child">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Child" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Child" title="Link to this definition">#</a></dt>
 <dd><p>Field subclass for a child PyTree node.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ojax.Child.name">
@@ -637,7 +652,7 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.Ignore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Ignore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Ignore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Ignore" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Ignore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Ignore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Ignore" title="Link to this definition">#</a></dt>
 <dd><p>Field subclass that is ignored by PyTree creation</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ojax.Ignore.name">
@@ -691,6 +706,62 @@ document.write(`
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="ojax.Alien">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">Alien</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ojax/otree.html#Alien"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.Alien" title="Link to this definition">#</a></dt>
+<dd><p>Field subclass that is incompatible with PyTree flatten/unflatten</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#ojax.Alien.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#ojax.Alien.type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.default">
+<span class="sig-name descname"><span class="pre">default</span></span><a class="headerlink" href="#ojax.Alien.default" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.default_factory">
+<span class="sig-name descname"><span class="pre">default_factory</span></span><a class="headerlink" href="#ojax.Alien.default_factory" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.repr">
+<span class="sig-name descname"><span class="pre">repr</span></span><a class="headerlink" href="#ojax.Alien.repr" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.hash">
+<span class="sig-name descname"><span class="pre">hash</span></span><a class="headerlink" href="#ojax.Alien.hash" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.init">
+<span class="sig-name descname"><span class="pre">init</span></span><a class="headerlink" href="#ojax.Alien.init" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><a class="headerlink" href="#ojax.Alien.compare" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#ojax.Alien.metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ojax.Alien.kw_only">
+<span class="sig-name descname"><span class="pre">kw_only</span></span><a class="headerlink" href="#ojax.Alien.kw_only" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ojax.fields">
 <span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">otree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ojax.OTree" title="ojax.otree.OTree"><span class="pre">OTree</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ojax.OTree" title="ojax.otree.OTree"><span class="pre">OTree</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ojax.OTreeField" title="ojax.otree.OTreeField"><span class="pre">OTreeField</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.Field" title="(in Python v3.13)"><span class="pre">Field</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/ojax/otree.html#fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.fields" title="Link to this definition">#</a></dt>
@@ -736,6 +807,20 @@ returns a field of type <a class="reference internal" href="#ojax.Child" title="
 <p>This function has identical arguments to <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> and
 returns a field of type <a class="reference internal" href="#ojax.Ignore" title="ojax.Ignore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.Ignore</span></code></a>.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ojax.alien">
+<span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">alien</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only=&lt;dataclasses._MISSING_TYPE</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ojax.Alien" title="ojax.otree.Alien"><span class="pre">Alien</span></a></span></span><a class="reference internal" href="_modules/ojax/otree.html#alien"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.alien" title="Link to this definition">#</a></dt>
+<dd><p>Declares an OTree field that is not part of PyTree and crashes the
+flatten / unflatten operations.</p>
+<p>This function has identical arguments to <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.field" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclasses.field</span></code></a> and
+returns a field of type <a class="reference internal" href="#ojax.Alien" title="ojax.Alien"><code class="xref py py-class docutils literal notranslate"><span class="pre">ojax.Alien</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ojax.AlienException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ojax.</span></span><span class="sig-name descname"><span class="pre">AlienException</span></span><a class="reference internal" href="_modules/ojax/otree.html#AlienException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ojax.AlienException" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ojax.OTree">
@@ -985,10 +1070,25 @@ the corresponding fields.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Ignore.kw_only"><code class="docutils literal notranslate"><span class="pre">Ignore.kw_only</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien"><code class="docutils literal notranslate"><span class="pre">Alien</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.name"><code class="docutils literal notranslate"><span class="pre">Alien.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.type"><code class="docutils literal notranslate"><span class="pre">Alien.type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.default"><code class="docutils literal notranslate"><span class="pre">Alien.default</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.default_factory"><code class="docutils literal notranslate"><span class="pre">Alien.default_factory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.repr"><code class="docutils literal notranslate"><span class="pre">Alien.repr</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.hash"><code class="docutils literal notranslate"><span class="pre">Alien.hash</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.init"><code class="docutils literal notranslate"><span class="pre">Alien.init</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.compare"><code class="docutils literal notranslate"><span class="pre">Alien.compare</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.metadata"><code class="docutils literal notranslate"><span class="pre">Alien.metadata</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.Alien.kw_only"><code class="docutils literal notranslate"><span class="pre">Alien.kw_only</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.fields"><code class="docutils literal notranslate"><span class="pre">fields()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.aux"><code class="docutils literal notranslate"><span class="pre">aux()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.child"><code class="docutils literal notranslate"><span class="pre">child()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.ignore"><code class="docutils literal notranslate"><span class="pre">ignore()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.alien"><code class="docutils literal notranslate"><span class="pre">alien()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.AlienException"><code class="docutils literal notranslate"><span class="pre">AlienException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree"><code class="docutils literal notranslate"><span class="pre">OTree</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree.update"><code class="docutils literal notranslate"><span class="pre">OTree.update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ojax.OTree.tree_flatten"><code class="docutils literal notranslate"><span class="pre">OTree.tree_flatten()</span></code></a></li>

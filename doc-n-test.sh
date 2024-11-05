@@ -1,6 +1,7 @@
+#!/usr/bin/env bash
 cd sphinx &&
 bash doc-build.sh &&
-cd ../tests &&
-python test_ojax.py &&
+cd .. &&
+bash run_coverage.sh &&
 cd .. &&
 echo "==== All done! ===="
