@@ -1,43 +1,47 @@
-from typing import (
-    TypeVar,
-    Sequence,
-    Union,
-)
+from __future__ import annotations
+from typing import cast
+from typing_extensions import Self
+from collections.abc import Sequence
 import abc
-from dataclasses import Field, MISSING, fields as dc_fields
+from dataclasses import field, Field, MISSING, fields as dc_fields
 import jax
 from . import pureclass
 
 
 class OTreeField(Field, metaclass=abc.ABCMeta):
     """Abstract dataclasses.Field subclass for OTree fields."""
+
     pass
 
 
 class Aux(OTreeField):
     """Field subclass for OTree auxiliary data that belong to ``PyTreeDef``."""
+
     pass
 
 
 class Child(OTreeField):
     """Field subclass for a child PyTree node."""
+
     pass
 
 
 class Ignore(OTreeField):
     """Field subclass that is ignored by PyTree creation"""
+
     pass
 
 
 class Alien(OTreeField):
-    """Field subclass that is incompatible with PyTree flatten/unflatten"""
+    """Field subclass that is incompatible with PyTree flatten"""
+
     pass
 
 
 def fields(
-        otree: Union["OTree", "type[OTree]"],
-        field_type: type[OTreeField] = None,
-        infer: bool = True,
+    otree: OTree | type[OTree],
+    field_type: type[OTreeField] | None = None,
+    infer: bool = True,
 ) -> tuple[Field, ...]:
     """Convenience function extending ``dataclasses.fields`` that can filter
     fields by OTree field type.
@@ -61,7 +65,8 @@ def fields(
     else:
         if infer:
             return tuple(
-                f for f in t_fields
+                f
+                for f in t_fields
                 if issubclass(otree.__infer_otree_field_type__(f), field_type)
             )
         else:
@@ -78,7 +83,6 @@ def aux(
     compare=True,
     metadata=None,
     kw_only=MISSING,
-    **kwargs
 ) -> Aux:
     """Declares an OTree field that holds auxiliary data as part of
     `PyTreeDef`.
@@ -86,7 +90,8 @@ def aux(
     This function has identical arguments to :obj:`dataclasses.field` and
     returns a field of type :class:`ojax.Aux`.
     """
-
+    if default is not MISSING and default_factory is not MISSING:
+        raise ValueError("cannot specify both default and default_factory")
     return Aux(
         default=default,
         default_factory=default_factory,
@@ -96,7 +101,6 @@ def aux(
         compare=compare,
         metadata=metadata,
         kw_only=kw_only,
-        **kwargs
     )
 
 
@@ -110,14 +114,14 @@ def child(
     compare=True,
     metadata=None,
     kw_only=MISSING,
-    **kwargs
 ) -> Child:
     """Declares an OTree field that holds a child PyTree node.
 
     This function has identical arguments to :obj:`dataclasses.field` and
     returns a field of type :class:`ojax.Child`.
     """
-
+    if default is not MISSING and default_factory is not MISSING:
+        raise ValueError("cannot specify both default and default_factory")
     return Child(
         default=default,
         default_factory=default_factory,
@@ -127,7 +131,6 @@ def child(
         compare=compare,
         metadata=metadata,
         kw_only=kw_only,
-        **kwargs
     )
 
 
@@ -141,14 +144,14 @@ def ignore(
     compare=True,
     metadata=None,
     kw_only=MISSING,
-    **kwargs
 ) -> Ignore:
     """Declares an OTree field that is ignored by PyTree creation.
 
     This function has identical arguments to :obj:`dataclasses.field` and
     returns a field of type :class:`ojax.Ignore`.
     """
-
+    if default is not MISSING and default_factory is not MISSING:
+        raise ValueError("cannot specify both default and default_factory")
     return Ignore(
         default=default,
         default_factory=default_factory,
@@ -158,7 +161,6 @@ def ignore(
         compare=compare,
         metadata=metadata,
         kw_only=kw_only,
-        **kwargs
     )
 
 
@@ -172,15 +174,15 @@ def alien(
     compare=True,
     metadata=None,
     kw_only=MISSING,
-    **kwargs
 ) -> Alien:
     """Declares an OTree field that is not part of PyTree and crashes the
-    flatten / unflatten operations.
+    flatten operations if holds value that is not None.
 
     This function has identical arguments to :obj:`dataclasses.field` and
     returns a field of type :class:`ojax.Alien`.
     """
-
+    if default is not MISSING and default_factory is not MISSING:
+        raise ValueError("cannot specify both default and default_factory")
     return Alien(
         default=default,
         default_factory=default_factory,
@@ -190,15 +192,13 @@ def alien(
         compare=compare,
         metadata=metadata,
         kw_only=kw_only,
-        **kwargs
     )
 
 
 class AlienException(Exception):
+    """Raised when trying to flatten an Alien field that is not None."""
+
     pass
-
-
-OTree_T = TypeVar("OTree_T", bound="OTree")
 
 
 class OTree(pureclass.PureClass):
@@ -234,16 +234,29 @@ class OTree(pureclass.PureClass):
 
     def __init_subclass__(cls, **kwargs):
         """Make each subclass a :class:`ojax.PureClass` and a PyTree."""
-        
+
         purecls = super().__init_subclass__(**kwargs)
+        # updating typing.dataclass_transform
+        purecls.__dataclass_transform__["field_specifiers"] = (
+            field,
+            Field,
+            aux,
+            Aux,
+            child,
+            Child,
+            Ignore,
+            ignore,
+            Alien,
+            alien,
+        )
         return jax.tree_util.register_pytree_node_class(purecls)
 
-    def update(self: OTree_T, **kwargs) -> OTree_T:
+    def update(self: Self, **kwargs) -> Self:
         """Create a new version of this OTree instance with updated children.
 
-        This method only updates the numerical data and will keep the OTree 
-        structure and the metadata intact. It is the intended method to 
-        update the content without changing the PyTree type. If you need to 
+        This method only updates the numerical data and will keep the OTree
+        structure and the metadata intact. It is the intended method to
+        update the content without changing the PyTree type. If you need to
         create a new OTree with a different metadata / altered structure, use
         :py:meth:`ojax.new` instead.
 
@@ -267,11 +280,9 @@ class OTree(pureclass.PureClass):
             raise ValueError(
                 f'update of keys {aux_args} not allowed, use "ojax.new()" '
                 f"instead to create new instances of {self.__class__.__name__}"
-                f" with updated auxiliary fields."
+                " with updated auxiliary fields."
             )
-        child_names = set(
-            f.name for f in fields(self, field_type=Child)
-        )
+        child_names = set(f.name for f in fields(self, field_type=Child))
         for k, v in kwargs.items():
             if k not in child_names:
                 continue
@@ -303,8 +314,8 @@ class OTree(pureclass.PureClass):
                 tree_leaves.extend(entry_leaves)
                 aux_values.append(entry_aux)
                 num_arrays.append((name, len(entry_leaves)))
-            elif issubclass(ftype, Alien):
-                raise AlienException(f'Cannot flatten alien field {name}.')
+            elif issubclass(ftype, Alien) and getattr(self, name) is not None:
+                raise AlienException(f"Cannot flatten alien field {name}.")
             elif issubclass(ftype, Ignore):
                 pass
             else:  # pragma: no cover
@@ -313,14 +324,14 @@ class OTree(pureclass.PureClass):
 
     @classmethod
     def tree_unflatten(
-        cls: type[OTree_T],
+        cls: type[Self],
         aux_data: tuple[tuple[tuple[str, int], ...], tuple],
         children: Sequence,
-    ) -> OTree_T:
+    ) -> Self:
         """Define the unflatten behavior of OTree as a PyTree."""
-        
+
         num_arrays, aux_values = aux_data
-        num_arrays = dict(num_arrays)
+        dict_num_arrays = dict(num_arrays)
         aux_values_iter = iter(aux_values)
         tree_children = {}
         offset = 0
@@ -329,16 +340,15 @@ class OTree(pureclass.PureClass):
             if issubclass(ftype, Aux):
                 tree_children[name] = next(aux_values_iter)
             elif issubclass(ftype, Child):
-                count = num_arrays[name]
-                child_leaves = children[offset: offset + count]
+                count = dict_num_arrays[name]
+                child_leaves = children[offset : offset + count]
                 tree_child = jax.tree.unflatten(
-                    next(aux_values_iter), child_leaves
+                    next(aux_values_iter),
+                    child_leaves,
                 )
                 tree_children[name] = tree_child
                 offset += count
-            elif issubclass(ftype, Alien):  # pragma: no cover
-                raise AlienException(f'Cannot unflatten alien field {name}.')
-            elif issubclass(ftype, Ignore):
+            elif issubclass(ftype, (Alien, Ignore)):
                 pass
             else:  # pragma: no cover
                 raise NotImplementedError
@@ -374,7 +384,7 @@ class OTree(pureclass.PureClass):
                 return Ignore
             elif isinstance(f, Alien):
                 return Alien
-            elif issubclass(f.type, (OTree, jax.Array)):
+            elif issubclass(cast(type, f.type), (OTree, jax.Array)):
                 return Child
             else:
                 return Aux

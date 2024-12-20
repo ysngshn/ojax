@@ -1,5 +1,16 @@
 # Change log
 
+## ojax 4.0.0
+
+Disable automatic `__init__` generation from dataclasses. Rework `Alien` field type.
+
+- Disabled automatic `__init__` generation from dataclasses to allow inheriting custom `__init__` from parent classes. 
+- Added `typing-extensions` requirement to properly support type hinting.
+- `Alien` field type now only crashes PyTree flatten operation when it holds a 
+value that is not `None`. 
+- Formatted code with `black`.
+- Adjusted the doc accordingly.
+
 ## ojax 3.1.0
 
 Add new `Alien` field type to denote "incompatible" fields that should crash 

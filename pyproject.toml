@@ -8,6 +8,7 @@ readme = "readme.rst"
 license = {text="Apache-2.0"}
 requires-python = ">=3.10"
 dependencies = [
+  "typing-extensions",
   "jax",
 ]
 dynamic = ["version"]
@@ -24,3 +25,16 @@ packages = ["ojax"]
 
 [tool.setuptools.dynamic]
 version = {attr = "ojax.__version__"}
+
+[project.optional-dependencies]
+dev = [
+  "coverage",
+  "mypy",
+  "black",
+  "twine",
+  "sphinx",
+  "myst-parser",
+  "sphinx-book-theme",
+  "sphinx-rtd-theme",
+  "sphinx-readme",
+]

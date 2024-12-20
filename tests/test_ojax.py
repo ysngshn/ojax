@@ -43,6 +43,16 @@ class TestOTree(unittest.TestCase):
 
             _ = WithProperty()
 
+    def test_bad_default(self):
+        with self.assertRaises(ValueError):
+            _ = ojax.aux(default=(), default_factory=tuple)
+        with self.assertRaises(ValueError):
+            _ = ojax.child(default=(), default_factory=tuple)
+        with self.assertRaises(ValueError):
+            _ = ojax.ignore(default=(), default_factory=tuple)
+        with self.assertRaises(ValueError):
+            _ = ojax.alien(default=(), default_factory=tuple)
+
     def test_field_type(self):
         class MyOTree(ojax.OTree):
             a: jax.Array = ojax.aux()
@@ -101,10 +111,9 @@ class TestOTree(unittest.TestCase):
             d: typing.ClassVar[typing.Any] = None
             f: io.BytesIO = ojax.alien(default_factory=io.BytesIO)
 
-            def __post_init__(self, e) -> None:
+            def __init__(self, a, b, c, e) -> None:
                 assert e == 'lol'
-                super().__post_init__()
-
+                self.assign_(a=a, b=b, c=c)
         try:
             _ = MyOTree(a=0, b=4.2, c=None, e='lol')
         except:
@@ -118,9 +127,9 @@ class TestOTree(unittest.TestCase):
             e: dataclasses.InitVar[str]
             d: typing.ClassVar[typing.Any] = None
 
-            def __post_init__(self, e) -> None:
+            def __init__(self, a, b, c, e) -> None:
                 assert e == 'lol'
-                super().__post_init__()
+                self.assign_(a=a, b=b, c=c)
 
         my_otree = MyOTree(a=0, b=4.2, c=None, e='lol')
         try:
@@ -135,7 +144,11 @@ class TestOTree(unittest.TestCase):
             self.assertEqual(getattr(my_otree, n), getattr(new_otree, n))
 
         class AlienOTree(MyOTree):
-            f: io.BytesIO = ojax.alien(default_factory=io.BytesIO)
+            f: io.BytesIO = ojax.alien()
+
+            def __init__(self, a, b, c, e, f=io.BytesIO()) -> None:
+                super().__init__(a, b, c, e)
+                self.assign_(f=f)
 
             def add_b(self, val):
                 return val + self.b
@@ -154,9 +167,9 @@ class TestOTree(unittest.TestCase):
             d: typing.ClassVar[typing.Any] = None
             f: io.BytesIO = ojax.alien(default_factory=io.BytesIO)
 
-            def __post_init__(self, e) -> None:
+            def __init__(self, a, b, c, e) -> None:
                 assert e == 'lol'
-                super().__post_init__()
+                self.assign_(a=a, b=b, c=c)
 
         my_otree = MyOTree(a=0, b=4.2, c=None, e='lol')
 
@@ -200,8 +213,9 @@ class TestOTree(unittest.TestCase):
             e: dataclasses.InitVar[str]
             d: typing.ClassVar[typing.Any] = None
 
-            def __post_init__(self, e) -> None:
+            def __init__(self, a, b, c, e) -> None:
                 assert e == 'lol'
+                self.assign_(a=a, b=b, c=c)
 
         my_otree = MyOTree(a=0, b=4.2, c=None, e='lol')
 
@@ -243,6 +257,9 @@ class TestOTree(unittest.TestCase):
     def test_jax_method(self):
         class BatchMean(ojax.OTree):
             shift: float
+
+            def __init__(self, shift: float):
+                self.assign_(shift=shift)
 
             def __call__(self, t: jax.Array) -> jax.Array:
                 return jax.vmap(lambda x: jax.numpy.mean(x) + self.shift)(t)

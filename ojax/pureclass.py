@@ -1,10 +1,11 @@
 """Customized frozen dataclass for immutable computation."""
-from typing import TypeVar, dataclass_transform
+
+from __future__ import annotations
+from typing import TypeVar
+from typing_extensions import dataclass_transform
 import warnings
 import copy
 from dataclasses import dataclass, fields
-
-PureClass_T = TypeVar("PureClass_T", bound="PureClass")
 
 
 class NoAnnotationWarning(UserWarning):
@@ -12,13 +13,14 @@ class NoAnnotationWarning(UserWarning):
 
 
 def _is_magic_name(s: str) -> bool:
-    return s.startswith('__') and s.endswith('__')
+    return s.startswith("__") and s.endswith("__")
 
 
 # get non property, non magical and non callable class variables
 def _get_class_vars(cls: type) -> list[str]:
     return [
-        m for m, v in cls.__dict__.items()
+        m
+        for m, v in cls.__dict__.items()
         if not (
             callable(getattr(cls, m))
             or _is_magic_name(m)
@@ -34,15 +36,15 @@ def _warn_no_anno_class_attrs(cls: type) -> None:
     if not no_annos:
         return
     warnings.warn(
-        f'Non-annotated class attributes are ignored by dataclass '
-        f'{cls.__name__}: {no_annos}. Consider adding annotations and '
-        f'declaring class variables explicitly with typing.ClassVar instead.',
+        "Non-annotated class attributes are ignored by dataclass "
+        f"{cls.__name__}: {no_annos}. Consider adding annotations and "
+        "declaring class variables explicitly with typing.ClassVar instead.",
         NoAnnotationWarning,
     )
 
 
 @dataclass_transform(frozen_default=True)
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False)
 class PureClass:
     """ "Record-type" base class with immutable and annotated dataclass fields.
 
@@ -60,14 +62,9 @@ class PureClass:
 
         # warn user about potential missing annotation error
         _warn_no_anno_class_attrs(cls)
-        return dataclass(frozen=True, **kwargs)(cls)
+        return dataclass(frozen=True, init=False, **kwargs)(cls)
 
-    def __post_init__(self, *args, **kwargs) -> None:
-        """Empty __post_init__() for multiple inheritance support."""
-
-        pass
-
-    def assign_(self: PureClass_T, **kwargs) -> None:
+    def assign_(self, **kwargs) -> None:
         """Low-level in-place setting of PureClass instance fields.
 
         This should only be used during custom instance creation and before the
@@ -92,6 +89,9 @@ class PureClass:
             )
         for k, v in kwargs.items():
             object.__setattr__(self, k, v)
+
+
+PureClass_T = TypeVar("PureClass_T", bound=PureClass)
 
 
 def new(pure_obj: PureClass_T, **kwargs) -> PureClass_T:

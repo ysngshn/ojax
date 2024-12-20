@@ -1,7 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/sh -
+echo
+echo "== building sphinx doc ..."
+echo
 cd sphinx &&
-bash doc-build.sh &&
+sh doc-build.sh &&
 cd .. &&
-bash run_coverage.sh &&
-cd .. &&
+echo
+echo "== running unittest coverage ..."
+echo
+sh run_coverage.sh &&
+echo
+echo "== running mypy ..."
+echo
+sh run_mypy.sh &&
+echo
+echo "== running black ..."
+echo
+sh run_black.sh &&
+echo
 echo "==== All done! ===="

@@ -5,8 +5,10 @@ Dependencies
 ------------
 
 OJAX is written in pure Python and requires Python 3.10+ (same as JAX).
+``typing-extensions`` package is also loaded for using the newer Python typing
+features to properly do type hinting and ``mypy`` checks.
 
-It only depends on JAX, which can be installed following the
+Apart from this, OJAX only depends on JAX, which can be installed following the
 `JAX official installation guide`_.
 
 Since JAX is still constantly changing the API, OJAX releases will align with

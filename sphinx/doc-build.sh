@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh -
 
 # build Sphinx docs to html
 make clean html &&
