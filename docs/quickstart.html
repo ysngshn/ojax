@@ -500,7 +500,7 @@ declarations for more complex cases.</p>
 </section>
 <section id="the-init-method">
 <h2>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method<a class="headerlink" href="#the-init-method" title="Link to this heading">#</a></h2>
-<p>After the declaration comes the instantiation part. The following commented
+<p>After the declaration comes the instantiation part. The following
 code segment from the <a class="reference internal" href="example.html"><span class="doc">full example</span></a> shows an example
 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># use .assign_ only in __init__ function</span>
@@ -524,7 +524,8 @@ in simple cases, it requires more expertise with the Python dataclass
 structure and can be problematic especially with class inheritance (e.g.,
 <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>). Moreover, it will silently prevent the inheritance <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method
 from parent classes with an automatic generation which is error-prone. Thus
-OJAX has disabled the automatic <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method generation feature.</p>
+OJAX has disabled the automatic <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method generation feature
+<em>(since 3.1)</em>.</p>
 </div>
 </section>
 <section id="updating-the-fields">

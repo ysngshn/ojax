@@ -106,7 +106,7 @@ subclasses.
 The ``__init__`` method
 -------------------------
 
-After the declaration comes the instantiation part. The following commented
+After the declaration comes the instantiation part. The following
 code segment from the :doc:`full example <example>` shows an example
 ``__init__`` method.
 
@@ -129,7 +129,8 @@ immutable dataclass).
   structure and can be problematic especially with class inheritance (e.g.,
   [1]_). Moreover, it will silently prevent the inheritance ``__init__`` method
   from parent classes with an automatic generation which is error-prone. Thus
-  OJAX has disabled the automatic ``__init__`` method generation feature.
+  OJAX has disabled the automatic ``__init__`` method generation feature 
+  *(since 3.1)*.
 
 Updating the fields
 -------------------

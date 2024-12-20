@@ -392,7 +392,7 @@
 <h2>ojax 4.0.0<a class="headerlink" href="#ojax-4-0-0" title="Link to this heading">#</a></h2>
 <p>Disable automatic <code class="docutils literal notranslate"><span class="pre">__init__</span></code> generation from dataclasses. Rework <code class="docutils literal notranslate"><span class="pre">Alien</span></code> field type.</p>
 <ul class="simple">
-<li><p>Disabled automatic <code class="docutils literal notranslate"><span class="pre">__init__</span></code> generation from dataclasses to avoid unintended <code class="docutils literal notranslate"><span class="pre">__init__</span></code> function in case of class inheritance.</p></li>
+<li><p>Disabled automatic <code class="docutils literal notranslate"><span class="pre">__init__</span></code> generation from dataclasses to allow inheriting custom <code class="docutils literal notranslate"><span class="pre">__init__</span></code> from parent classes.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">typing-extensions</span></code> requirement to properly support type hinting.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Alien</span></code> field type now only crashes PyTree flatten operation when it holds a
 value that is not <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
