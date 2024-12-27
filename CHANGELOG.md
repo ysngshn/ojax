@@ -1,5 +1,9 @@
 # Change log
 
+## ojax 4.0.1
+
+Fix issues related to flatten and unflatten of alien fields with value `None`.
+
 ## ojax 4.0.0
 
 Disable automatic `__init__` generation from dataclasses. Rework `Alien` field type.
@@ -47,7 +51,7 @@ type checking. This is also in line with the standard `dataclasses` usage.
 
 ## ojax 2.0.2
 
-Fixes unnecessary missing annotation warning for non-user-defined attributes.
+Fix unnecessary missing annotation warning for non-user-defined attributes.
 
 ## ojax 2.0.1
 

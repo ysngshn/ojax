@@ -157,6 +157,15 @@ class TestOTree(unittest.TestCase):
         self.assertEqual(jax.jit(alien_otree.add_b)(10), 14.2)
         with self.assertRaises(ojax.AlienException):
             _ = jax.tree.flatten(alien_otree)
+        alien_otree = alien_otree.update(f=None)
+        try:
+            vals, treedef = jax.tree.flatten(alien_otree)
+        except:
+            self.fail("OTree flatten failed unexpectedly.")
+        try:
+            _ = jax.tree.unflatten(treedef, vals)
+        except:
+            self.fail("OTree unflatten failed unexpectedly.")
 
     def test_update(self):
         class MyOTree(ojax.OTree):

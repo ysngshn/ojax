@@ -314,8 +314,11 @@ class OTree(pureclass.PureClass):
                 tree_leaves.extend(entry_leaves)
                 aux_values.append(entry_aux)
                 num_arrays.append((name, len(entry_leaves)))
-            elif issubclass(ftype, Alien) and getattr(self, name) is not None:
-                raise AlienException(f"Cannot flatten alien field {name}.")
+            elif issubclass(ftype, Alien):
+                if getattr(self, name) is not None:
+                    raise AlienException(f"Cannot flatten alien field {name}.")
+                else:
+                    pass
             elif issubclass(ftype, Ignore):
                 pass
             else:  # pragma: no cover
@@ -348,8 +351,10 @@ class OTree(pureclass.PureClass):
                 )
                 tree_children[name] = tree_child
                 offset += count
-            elif issubclass(ftype, (Alien, Ignore)):
+            elif issubclass(ftype, Ignore):
                 pass
+            elif issubclass(ftype, Alien):
+                tree_children[name] = None
             else:  # pragma: no cover
                 raise NotImplementedError
         # alternative to cls.__init__ since it might be custom

@@ -1,2 +1,3 @@
 #!/bin/sh -
-python -m unittest discover -s tests/ -v
+XLA_PYTHON_CLIENT_PREALLOCATE=false \
+    python -m unittest discover -s tests/ -v
